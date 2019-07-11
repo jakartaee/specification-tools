@@ -1,0 +1,14 @@
+target
+.classpath
+.project
+.settings
+.idea
+*.ipr
+*.iml
+*.log
+*.vscode
+*~
+nb-configuration.xml
+.factorypath
+.history
+
