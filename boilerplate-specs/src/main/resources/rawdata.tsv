@@ -1,0 +1,40 @@
+Project Id	Project Name	Old Project Name	Project URL	Specification	Code	Jakarta EE 8 Version	Is Specification Project?	Document Copyright Assigned?	Document Contributed?	Directory	File
+ee4j.jaf	Jakarta Activation	Eclipse Project for JAF	https://projects.eclipse.org/projects/ee4j.jaf	Jakarta Activation	activation	1.2.1	Yes			activation	Activation.adoc
+ee4j.ca	Jakarta Annotations	Eclipse Project for Common Annotations	https://projects.eclipse.org/projects/ee4j.ca	Jakarta Annotations	annotations	1.3.4	Yes			annotations	Annotations.adoc
+ee4j.jaspic	Jakarta Authentication	Eclipse Project for JASPIC	https://projects.eclipse.org/projects/ee4j.jaspic	Jakarta Authentication	authentication	1.1.2	Yes			authentication	Authentication.adoc
+ee4j.jacc	Jakarta Authorization	Eclipse Project for JACC	https://projects.eclipse.org/projects/ee4j.jacc	Jakarta Authorization	authorization	1.6.1	Yes			authorization	Authorization.adoc
+ee4j.cu	Jakarta Concurrency	Eclipse Project for Concurrency Utilities	https://projects.eclipse.org/projects/ee4j.cu	Jakarta Concurrency	concurrency	1.1.1	Yes			concurrency	Concurrency.adoc
+ee4j.jca	Jakarta Connectors	Eclipse Project for JCA	https://projects.eclipse.org/projects/ee4j.jca	Jakarta Connectors	connectors	1.7.2	Yes			connectors	Connectors.adoc
+ee4j.jakartaee-stable	Jakarta Deployment	Eclipse Project for Stable Jakarta EE APIs	https://projects.eclipse.org/projects/ee4j.jakartaee-stable	Jakarta Deployment	deployment		Yes			deployment	Deployment.adoc
+ee4j.ejb	Jakarta Enterprise Beans	Eclipse Project for EJB	https://projects.eclipse.org/projects/ee4j.ejb	Jakarta Enterprise Beans	enterprise-beans	3.2.3	Yes			enterprise-beans	EBCore.adoc
+ee4j.jakartaee-stable	Jakarta Enterprise Web Services	Eclipse Project for Stable Jakarta EE APIs	https://projects.eclipse.org/projects/ee4j.jakartaee-stable	Jakarta Enterprise Web Services	enterprise-ws		Yes			enterprise-web-services	EnterpriseWebServices.adoc
+ee4j.el	Jakarta Expression Language	Eclipse Project for Expression Language	https://projects.eclipse.org/projects/ee4j.el	Jakarta Expression Language	expression-language	3.0.2	Yes			expression-language	ELSpec.adoc
+ee4j.interceptors	Jakarta Interceptors	Eclipse Project for Interceptors	https://projects.eclipse.org/projects/ee4j.interceptors	Jakarta Interceptors	interceptors	1.2.3	Yes			interceptors	Interceptors.adoc
+ee4j.jsonb	Jakarta JSON Binding	Eclipse Project for JSONB	https://projects.eclipse.org/projects/ee4j.jsonb	Jakarta JSON Binding	jsonb	1.0.1	Yes			json-binding	JSONBinding.adoc
+ee4j.jsonp	Jakarta JSON Processing	Eclipse Project for JSONP	https://projects.eclipse.org/projects/ee4j.jsonp	Jakarta JSON Processing	jsonp	1.1.5	Yes			json-processing	JSONProcessing.adoc
+ee4j.javamail	Jakarta Mail	Eclipse Project for JavaMail	https://projects.eclipse.org/projects/ee4j.javamail	Jakarta Mail	mail	1.6.3	Yes			mail	Mail.adoc
+ee4j.jakartaee-stable	Jakarta Management	Eclipse Project for Stable Jakarta EE APIs	https://projects.eclipse.org/projects/ee4j.jakartaee-stable	Jakarta Management	management		Yes			management	Management.adoc
+ee4j.jms	Jakarta Messaging	Eclipse Project for JMS	https://projects.eclipse.org/projects/ee4j.jms	Jakarta Messaging	messaging	2.0.2	Yes			messaging	Messaging.adoc
+ee4j.jpa	Jakarta Persistence	Eclipse Project for JPA	https://projects.eclipse.org/projects/ee4j.jpa	Jakarta Persistence	persistence	2.2.2	Yes			persistence	Persistence.adoc
+ee4j.jakartaee-platform	Jakarta EE Platform	Eclipse Jakarta EE Platform	https://projects.eclipse.org/projects/ee4j.jakartaee-platform	Jakarta Managed Beans	managed-beans		Yes			platform	ManagedBeans.adoc
+ee4j.jakartaee-platform	Jakarta EE Platform	Eclipse Jakarta EE Platform	https://projects.eclipse.org/projects/ee4j.jakartaee-platform	Jakarta EE Full Profile	full-profile	8.0.0	Yes	Yes		platform	Platform_Spec.adoc
+ee4j.jakartaee-platform	Jakarta EE Platform	Eclipse Jakarta EE Platform	https://projects.eclipse.org/projects/ee4j.jakartaee-platform	Jakarta EE Web Profile	web-profile	8.0.0	Yes	Yes		platform	WebProfile.adoc
+ee4j.jaxrs	Jakarta RESTful Web Services	Eclipse Project for JAX-RS	https://projects.eclipse.org/projects/ee4j.jaxrs	Jakarta RESTful Web Services	restful-ws	2.1.5	Yes			restful-web-services	RESTfulWebServices.adoc
+ee4j.es	Jakarta Security	Eclipse Project for Enterprise Security	https://projects.eclipse.org/projects/ee4j.es	Jakarta Security	security	1.0.1	Yes			security	security-spec.asciidoc
+ee4j.faces	Jakarta Server Faces		https://projects.eclipse.org/projects/ee4j.faces	Jakarta Server Faces	faces		Yes			server-faces	ServerFaces.adoc
+ee4j.jsp	Jakarta Server Pages	Eclipse Project for JSP	https://projects.eclipse.org/projects/ee4j.jsp	Jakarta Server Pages	pages	2.3.4	Yes			server-pages	ServerPages.adoc
+ee4j.servlet	Jakarta Servlet	Eclipse Project for Servlet	https://projects.eclipse.org/projects/ee4j.servlet	Jakarta Servlet	servlet	4.0.2	Yes			servlet	Servlet.adoc
+ee4j.jaxws	Jakarta XML Web Services	Eclipse Project for JAX-WS	https://projects.eclipse.org/projects/ee4j.jaxws	Jakarta SOAP Attachments	soap		Yes			soap-attachments	SOAPAttachments.adoc
+ee4j.jstl	Jakarta Standard Tag Library	Eclipse Project for JSTL	https://projects.eclipse.org/projects/ee4j.jstl	Jakarta Standard Tag Library	tags	1.2.3	Yes			tag-library	TagLibrary.adoc
+ee4j.jta	Jakarta Transactions	Eclipse Project for JTA	https://projects.eclipse.org/projects/ee4j.jta	Jakarta Transactions	transactions	1.3.2	Yes			transactions	Transactions.adoc
+ee4j.jaxws	Jakarta XML Web Services	Eclipse Project for JAX-WS	https://projects.eclipse.org/projects/ee4j.jaxws	Jakarta Web Services Metadata	ws-metadata		Yes			web-services-metadata	WebServicesMetadata.adoc
+ee4j.websocket	Jakarta WebSocket	Eclipse Project for WebSocket	https://projects.eclipse.org/projects/ee4j.websocket	Jakarta WebSocket	websocket	1.1.1	Yes			web-socket	WebSocket.adoc
+ee4j.jaxb	Jakarta XML Binding	Eclipse Project for JAXB	https://projects.eclipse.org/projects/ee4j.jaxb	Jakarta XML Binding	xml-binding	2.3.2	Yes			xml-binding	XMLBinding.adoc
+ee4j.jakartaee-stable	Jakarta Stable APIs	Eclipse Project for Stable Jakarta EE APIs	https://projects.eclipse.org/projects/ee4j.jakartaee-stable	Jakarta XML Registries	xml-registries		Yes			xml-registries	XMLRegistries.adoc
+ee4j.jakartaee-stable	Jakarta Stable APIs	Eclipse Project for Stable Jakarta EE APIs	https://projects.eclipse.org/projects/ee4j.jakartaee-stable	Jakarta XML RPC	xml-rpc		Yes			xml-rpc	XMLbasedRPC.adoc
+ee4j.jaxws	Jakarta XML Web Services	Eclipse Project for JAX-WS	https://projects.eclipse.org/projects/ee4j.jaxws	Jakarta XML Web Services	xml-ws		Yes			xml-web-services	XMLWebServices.adoc
+ee4j.jakartabatch	Jakarta Batch		https://projects.eclipse.org/projects/ee4j.jakartabatch	Jakarta Batch	batch		Yes				
+ee4j.cdi	Jakarta Contexts and Dependency Injection			Jakarta Contexts and Dependency Injection	cdi		Proposal				
+ee4j.cdi	Jakarta Contexts and Dependency Injection			Jakarta Dependency Injection	dependency-injection		Proposal				
+ee4j.jbv	Jakarta Bean Validation			Jakarta Bean Validation	bean-validation		Yes				
+ee4j.jsp	Jakarta Server Pages	Eclipse Project for JSP	https://projects.eclipse.org/projects/ee4j.jsp	Jakarta Debugging Support for Other Languages	debugging		Yes			debugging-support	DebuggingSupport.adoc
