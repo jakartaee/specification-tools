@@ -24,6 +24,7 @@ import org.apache.openejb.loader.IO;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,5 +74,10 @@ public class Spec {
                 .specCode(column[i++])
                 .specVersion(column[i++])
                 .build();
+    }
+
+    public static List<Spec> loadTsv() throws IOException {
+        final URL tsvUrl = Spec.class.getClassLoader().getResource("rawdata.tsv");
+        return loadTsv(org.tomitribe.util.IO.read(tsvUrl));
     }
 }

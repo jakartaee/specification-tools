@@ -2,9 +2,9 @@
 // Copyright (c) 2017, 2019 Contributors to the Eclipse Foundation
 //
 
-= Jakarta Wombat
-:authors: Jakarta Wombat Team, https://projects.eclipse.org/projects/ee4j.wombat
-:email: https://dev.eclipse.org/mailman/listinfo/wombat-dev
+= {specName} {specVersion}
+:authors: {specName} Team, https://projects.eclipse.org/projects/{projectId}
+:email: https://dev.eclipse.org/mailman/listinfo/{shortName}-dev
 :version-label!:
 :doctype: book
 :license: Eclipse Foundation Specification License v1.0
@@ -23,6 +23,6 @@ endif::[]
 :sectnums!:
 include::license-efsl.adoc[]
 
-// == Wombat
+// == Scope
 :sectnums:
-include::wombat.adoc[]
+include::scope.adoc[]

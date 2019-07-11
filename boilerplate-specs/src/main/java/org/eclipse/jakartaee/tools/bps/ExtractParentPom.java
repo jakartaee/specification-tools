@@ -29,6 +29,10 @@ public class ExtractParentPom {
 
 
     public static String from(final File file) throws IOException {
+        return getPom(file).getPom();
+    }
+
+    public static Pom getPom(final File file) throws IOException {
         final Pom pom = new Pom();
 
         final InputStream inputStream = IO.read(file);
@@ -54,8 +58,7 @@ public class ExtractParentPom {
                 });
 
         Templates.interpolate(pom);
-
-        return pom.getPom();
+        return pom;
     }
 
     @Data

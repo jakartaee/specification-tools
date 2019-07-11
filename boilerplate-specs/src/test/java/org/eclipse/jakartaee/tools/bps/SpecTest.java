@@ -1,10 +1,7 @@
 package org.eclipse.jakartaee.tools.bps;
 
 import org.junit.Test;
-import org.tomitribe.util.IO;
 
-import java.io.File;
-import java.net.URL;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -27,8 +24,7 @@ public class SpecTest {
 
     @Test
     public void testLoadTsv() throws Exception {
-        final URL tsvUrl = Spec.class.getClassLoader().getResource("rawdata.tsv");
-        final List<Spec> specs = Spec.loadTsv(IO.read(tsvUrl));
+        final List<Spec> specs = Spec.loadTsv();
 
         final Spec spec = specs.get(0);
 
@@ -39,4 +35,5 @@ public class SpecTest {
                 "specName=Jakarta Activation, specCode=activation, specVersion=1.2.1, " +
                 "specRepo=null, apiRepo=null, tckRepo=null)", spec.toString());
     }
+
 }

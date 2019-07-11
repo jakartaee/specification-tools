@@ -1,7 +1,7 @@
-Jakarta Wombat Specification
+{specName} Specification
 ============================
 
-This project generates the Jakarta Wombat Specification.
+This project generates the {specName} Specification.
 
 Building
 --------
@@ -16,7 +16,7 @@ Run the full build:
 `mvn install`
 
 Locate the html files:
-- `target/generated-docs/wombat-spec-<version>.html`
+- `target/generated-docs/{specCode}-spec-<version>.html`
 
 Locate the PDF files:
-- `target/generated-docs/wombat-spec-<version>.pdf`
+- `target/generated-docs/{specCode}-spec-<version>.pdf`
