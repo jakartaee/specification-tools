@@ -20,6 +20,7 @@ import org.apache.openejb.loader.Files;
 import org.apache.openejb.loader.IO;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.URIish;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHRepository;
@@ -36,32 +37,37 @@ public class AddBoilerplateSpec {
     private static final GitHub github = Env.github();
 
     public static void main(String[] args) throws Exception {
-        new AddBoilerplateSpec().main();
+        new AddBoilerplateSpec().main("jms-api");
     }
 
-    public void main() throws Exception {
-        final File file = new File(Dirs.work().repos(), "jms-api");
-
+    public void main(final String name) throws Exception {
+        main(name, "master");
+        main(name, "EE4J_8");
+    }
+    public void main(final String name, final String branch) throws Exception {
+        final String master = branch;
 
         final GHOrganization ee4j = github.getOrganization("eclipse-ee4j");
-        final GHRepository jmsApi = ee4j.getRepository("jms-api");
+        final GHRepository apiRepo = ee4j.getRepository(name);
 
-        final GHRepository fork = jmsApi.fork();
+        final GHRepository fork = apiRepo.fork();
         final File forks = Files.mkdirs(Dirs.work().forks());
 
         final Git git;
 
-        final File clone = new File(forks, fork.getName());
+        final File clone = new File(forks, fork.getName() + "-" + master);
+
         if (!clone.exists()) {
             git = Git.cloneRepository()
-                    .setURI(jmsApi.getSshUrl())
+                    .setURI(fork.getSshUrl())
+                    .setBranch(master)
                     .setDirectory(clone)
                     .call();
-            git.remoteAdd().setName("eclipse").setUri(new URIish(jmsApi.getSshUrl())).call();
+            git.remoteAdd().setName("eclipse").setUri(new URIish(apiRepo.getSshUrl())).call();
         } else {
             git = Git.open(clone);
-            git.remoteAdd().setName("eclipse").setUri(new URIish(jmsApi.getSshUrl())).call();
-            git.pull().setRemote("eclipse").setRemoteBranchName("master").call();
+            git.remoteAdd().setName("eclipse").setUri(new URIish(apiRepo.getSshUrl())).call();
+            git.pull().setRemote("eclipse").setRemoteBranchName(master).call();
         }
 
         final Path project = clone.toPath();
@@ -82,6 +88,8 @@ public class AddBoilerplateSpec {
 
         createSpecSubmodule(git, project);
 
+        createPullRequest(git, project, apiRepo, master);
+
     }
 
     /**
@@ -94,11 +102,16 @@ public class AddBoilerplateSpec {
         java.nio.file.Files.move(project.resolve("pom.xml"), api.resolve("pom.xml"));
         git.add().addFilepattern("api").call();
         git.commit()
-                .setMessage("Converting to an api submodule")
+                .setMessage("Move src/ to an new api/src/ submodule")
                 .setAll(true).call();
 
         final String parent = ExtractParentPom.from(api.resolve("pom.xml").toFile());
         IO.copy(IO.read(parent), project.resolve("pom.xml").toFile());
+
+        git.add().addFilepattern("pom.xml").call();
+        git.commit()
+                .setMessage("New parent pom.xml")
+                .setAll(true).call();
     }
 
 
@@ -131,9 +144,16 @@ public class AddBoilerplateSpec {
 
         git.add().addFilepattern("spec").call();
         git.commit()
-                .setMessage("Converting to an api submodule")
+                .setMessage("Add spec/ submodule with boilerplate asciidoc")
                 .setAll(true).call();
 
     }
 
+    private void createPullRequest(final Git git, final Path project, GHRepository repo, final String branch) throws GitAPIException, IOException {
+        final String s = "boilerplate-spec-" + branch;
+        git.branchCreate().setName(s).call();
+        git.push().setRemote("origin").setRefSpecs(new RefSpec(s + ":" + s)).call();
+
+        repo.createPullRequest("Boilerplate Spec for " + branch + " Branch", "dblevins:" + s, branch, "Generated boilerplate spec.  Feel free to merge, then refine.\n\n See https://wiki.eclipse.org/How_to_Prepare_API_Projects_to_Jakarta_EE_8_Release");
+    }
 }
