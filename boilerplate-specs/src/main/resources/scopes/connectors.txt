@@ -1,0 +1,1 @@
+Jakarta Connectors defines a standard architecture for Jakarta application components to connect to Enterprise Information Systems.

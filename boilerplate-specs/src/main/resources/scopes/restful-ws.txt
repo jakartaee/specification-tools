@@ -1,0 +1,1 @@
+Jakarta RESTful Web Services defines a standard for development of web services following the Representational State Transfer (REST) architectural pattern.

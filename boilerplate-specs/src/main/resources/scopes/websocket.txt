@@ -1,0 +1,1 @@
+Jakarta WebSocket defines how Jakarta based applications create and manage WebSocket Clients and Servers.
