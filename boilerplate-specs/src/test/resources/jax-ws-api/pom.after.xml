@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 1997, 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.eclipse.ee4j</groupId>
+        <artifactId>project</artifactId>
+        <version>1.0.5</version>
+    </parent>
+
+    <groupId>org.eclipse.ee4j.jax-ws-api</groupId>
+    <artifactId>jax-ws-api-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>2.4.0-SNAPSHOT</version>
+    <name>JAX-WS API</name>
+    <description>JAX-WS (JSR 224) API</description>
+    <url>https://github.com/eclipse-ee4j/jax-ws-api</url>
+
+    <scm>
+        <connection>scm:git:git://github.com/eclipse-ee4j/jax-ws-api</connection>
+        <developerConnection>scm:git:git://github.com/eclipse-ee4j/jax-ws-api</developerConnection>
+        <url>https://github.com/eclipse-ee4j/jax-ws-api</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <modules>
+        <module>api</module>
+    </modules>
+
+    <licenses>
+        <license>
+            <name>Eclipse Distribution License - v 1.0</name>
+            <url>http://www.eclipse.org/org/documents/edl-v10.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+</project>
