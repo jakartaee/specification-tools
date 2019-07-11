@@ -16,6 +16,10 @@
  */
 package org.eclipse.jakartaee.tools.bps;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.tomitribe.util.IO;
 import org.tomitribe.util.collect.ObjectMap;
 
@@ -25,7 +29,62 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Boilerplate {
+
+    private String readmeMd;
+    private String pomXml;
+    private String assemblyXml;
+    private String scopeAdoc;
+    private String specAdoc;
+    private String themeYaml;
+    private String licenseEfslAdoc;
+    private byte[] jakartaEeLogoPng;
+    private Spec spec;
+
+    public static Boilerplate loadFor(final File pomFile) throws IOException {
+        final ExtractParentPom.Pom pom = ExtractParentPom.getPom(pomFile);
+
+        final List<Spec> specs = Spec.loadTsv();
+
+        final Spec spec = specs.stream()
+                .filter(s -> s.getProjectId().contains(pom.getShortName()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Cannot find a spec descriptor for " + pom.getShortName()));
+
+        final Map<String, Object> data = new HashMap<>();
+        data.putAll(new ObjectMap(pom));
+        data.putAll(new ObjectMap(spec));
+        data.put("parentArtifactId", data.remove("artifactId"));
+
+        normalizeSpecVersion(data);
+
+        data.put("scopeStatement", load("scopes/" + data.get("specCode") + ".txt"));
+        data.put("README.md", load("spec-template/README.md"));
+        data.put("pom.xml", load("spec-template/pom.xml"));
+        data.put("assembly.xml", load("spec-template/assembly.xml"));
+        data.put("scope.adoc", load("spec-template/src/main/asciidoc/scope.adoc"));
+        data.put("spec.adoc", load("spec-template/src/main/asciidoc/wombat-spec.adoc"));
+
+        Templates.interpolate(data);
+
+        return Boilerplate.builder()
+                .readmeMd(data.get("README.md").toString())
+                .pomXml(data.get("pom.xml").toString())
+                .assemblyXml(data.get("assembly.xml").toString())
+                .scopeAdoc(data.get("scope.adoc").toString())
+                .specAdoc(data.get("spec.adoc").toString())
+                .themeYaml(load("spec-template/src/main/theme/jakartaee-theme.yml"))
+                .licenseEfslAdoc(load("spec-template/src/main/asciidoc/license-efsl.adoc"))
+                .jakartaEeLogoPng(loadBytes("spec-template/src/main/asciidoc/images/jakarta_ee_logo_schooner_color_stacked_default.png"))
+                .spec(spec)
+                .build();
+    }
+
+
     public static Map<String, Object> loadTemplatesFor(final File file) throws IOException {
         final ExtractParentPom.Pom pom = ExtractParentPom.getPom(file);
 
@@ -34,7 +93,7 @@ public class Boilerplate {
         final Spec spec = specs.stream()
                 .filter(s -> s.getProjectId().contains(pom.getShortName()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Cannot find a spec descriptor for "+pom.getShortName()));
+                .orElseThrow(() -> new IllegalStateException("Cannot find a spec descriptor for " + pom.getShortName()));
 
         final Map<String, Object> data = new HashMap<>();
         data.putAll(new ObjectMap(pom));
@@ -55,6 +114,10 @@ public class Boilerplate {
 
     public static String load(final String name) throws IOException {
         return IO.slurp(Boilerplate.class.getClassLoader().getResource(name));
+    }
+
+    public static byte[] loadBytes(final String name) throws IOException {
+        return IO.readBytes(Boilerplate.class.getClassLoader().getResource(name));
     }
 
     public static void normalizeSpecVersion(final Map<String, Object> data) {

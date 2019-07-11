@@ -24,13 +24,10 @@ import org.eclipse.jgit.transport.URIish;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
-import org.tomitribe.swizzle.stream.StreamBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Path;
-import java.util.function.Consumer;
 
 import static java.nio.file.Files.createDirectory;
 
@@ -69,9 +66,22 @@ public class AddBoilerplateSpec {
 
         final Path project = clone.toPath();
 
+        /**
+         * if it already has a `spec` dir, skip it
+         */
+        if (project.resolve("spec").toFile().exists()) {
+            return;
+        }
+
+        /**
+         * if it is a single module project, make it multi-module
+         */
         if (project.resolve("src").toFile().exists()) {
             createApiSubmodule(git, project);
         }
+
+        createSpecSubmodule(git, project);
+
     }
 
     /**
@@ -83,7 +93,6 @@ public class AddBoilerplateSpec {
         java.nio.file.Files.move(project.resolve("src"), api.resolve("src"));
         java.nio.file.Files.move(project.resolve("pom.xml"), api.resolve("pom.xml"));
         git.add().addFilepattern("api").call();
-        git.add().addFilepattern("spec").call();
         git.commit()
                 .setMessage("Converting to an api submodule")
                 .setAll(true).call();
@@ -91,4 +100,40 @@ public class AddBoilerplateSpec {
         final String parent = ExtractParentPom.from(api.resolve("pom.xml").toFile());
         IO.copy(IO.read(parent), project.resolve("pom.xml").toFile());
     }
+
+
+    private void createSpecSubmodule(final Git git, final Path project) throws IOException, GitAPIException {
+
+        final Path spec = createDirectory(project.resolve("spec"));
+        final Path src = createDirectory(project.resolve("spec/src"));
+        final Path main = createDirectory(project.resolve("spec/src/main"));
+        final Path asciidoc = createDirectory(project.resolve("spec/src/main/asciidoc"));
+        final Path images = createDirectory(project.resolve("spec/src/main/asciidoc/images"));
+        final Path theme = createDirectory(project.resolve("spec/src/main/theme"));
+
+        final File parentPomXml = project.resolve("pom.xml").toFile();
+
+        final Boilerplate boilerplate = Boilerplate.loadFor(parentPomXml);
+
+        IO.copy(IO.read(boilerplate.getAssemblyXml()), spec.resolve("assembly.xml").toFile());
+        IO.copy(IO.read(boilerplate.getPomXml()), spec.resolve("pom.xml").toFile());
+        IO.copy(IO.read(boilerplate.getReadmeMd()), spec.resolve("README.md").toFile());
+        IO.copy(IO.read(boilerplate.getScopeAdoc()), asciidoc.resolve("scope.adoc").toFile());
+        IO.copy(IO.read(boilerplate.getSpecAdoc()), asciidoc.resolve(boilerplate.getSpec().getSpecCode() + "-spec.adoc").toFile());
+        IO.copy(IO.read(boilerplate.getThemeYaml()), theme.resolve("jakartaee-theme.yml").toFile());
+        IO.copy(IO.read(boilerplate.getLicenseEfslAdoc()), asciidoc.resolve("license-efsl.adoc").toFile());
+        IO.copy(IO.read(boilerplate.getJakartaEeLogoPng()), images.resolve("jakarta_ee_logo_schooner_color_stacked_default.png").toFile());
+
+
+        final String updatedPom = IO.slurp(parentPomXml)
+                .replaceAll("(        <module>api</module>\n)", "$1        <module>spec</module>\n");
+        IO.copy(IO.read(updatedPom), parentPomXml);
+
+        git.add().addFilepattern("spec").call();
+        git.commit()
+                .setMessage("Converting to an api submodule")
+                .setAll(true).call();
+
+    }
+
 }

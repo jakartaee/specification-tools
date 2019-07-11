@@ -46,9 +46,9 @@ public class BoilerplateTest {
     public void testPom() throws Exception {
         final File file = getFile("jms-api/pom.xml");
 
-        final Map<String, Object> data = Boilerplate.loadTemplatesFor(file);
+            final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<!--\n" +
                 "\n" +
                 "    Copyright (c) 2019 Contributors to the Eclipse Foundation.\n" +
@@ -170,7 +170,7 @@ public class BoilerplateTest {
                 "                            <backend>pdf</backend>\n" +
                 "                            <outputFile>${project.build.directory}/generated-docs/messaging-spec-${project.version}.pdf</outputFile>\n" +
                 "                            <attributes>\n" +
-                "                                <pdf-stylesdir>${project.basedir}/src/theme</pdf-stylesdir>\n" +
+                "                                <pdf-stylesdir>${project.basedir}/src/main/theme</pdf-stylesdir>\n" +
                 "                                <pdf-style>jakartaee</pdf-style>\n" +
                 "                                <doctype>book</doctype>\n" +
                 "                                <status>${status}</status>\n" +
@@ -242,16 +242,16 @@ public class BoilerplateTest {
                 "            </plugin>\n" +
                 "        </plugins>\n" +
                 "    </build>\n" +
-                "</project>\n", data.get("pom.xml"));
+                "</project>\n", boilerplate.getPomXml());
     }
 
     @Test
     public void testAssembly() throws Exception {
         final File file = getFile("jms-api/pom.xml");
 
-        final Map<String, Object> data = Boilerplate.loadTemplatesFor(file);
+            final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
-        assertEquals("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" +
+            assertEquals("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" +
                 "<!--\n" +
                 " \n" +
                 "    Copyright (c) 2019 Contributors to the Eclipse Foundation.\n" +
@@ -282,27 +282,27 @@ public class BoilerplateTest {
                 "            <outputDirectory></outputDirectory>\n" +
                 "        </fileSet>\n" +
                 "    </fileSets>\n" +
-                "</assembly>\n", data.get("assembly.xml"));
+                "</assembly>\n", boilerplate.getAssemblyXml());
     }
 
     @Test
     public void testScope() throws Exception {
         final File file = getFile("jms-api/pom.xml");
 
-        final Map<String, Object> data = Boilerplate.loadTemplatesFor(file);
+            final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
-        assertEquals("== Specification Scope\n" +
-                "\n" +
-                "{scopeStatement}\n", data.get("scope.adoc"));
+            assertEquals("== Specification Scope\n" +
+                    "\n" +
+                    "Jakarta Messaging describes a means for Java applications to create, send, and receive messages via loosely coupled, reliable asynchronous communication services.\n", boilerplate.getScopeAdoc());
     }
 
     @Test
     public void testSpec() throws Exception {
         final File file = getFile("jms-api/pom.xml");
 
-        final Map<String, Object> data = Boilerplate.loadTemplatesFor(file);
+            final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
-        assertEquals("//\n" +
+            assertEquals("//\n" +
                 "// Copyright (c) 2017, 2019 Contributors to the Eclipse Foundation\n" +
                 "//\n" +
                 "\n" +
@@ -325,11 +325,11 @@ public class BoilerplateTest {
                 "\n" +
                 "// == License\n" +
                 ":sectnums!:\n" +
-                "include::license-efsl.adoc[]\n" +
+                    "include::license-efsl.adoc[]\n" +
                 "\n" +
                 "// == Scope\n" +
                 ":sectnums:\n" +
-                "include::scope.adoc[]\n", data.get("spec.adoc"));
+                "include::scope.adoc[]\n", boilerplate.getSpecAdoc());
     }
 
     public File getFile(final String name) throws IOException {

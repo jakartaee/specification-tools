@@ -2,9 +2,10 @@ package org.eclipse.jakartaee.tools.bps;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SpecTest {
 
@@ -34,6 +35,19 @@ public class SpecTest {
                 "projectUrl=https://projects.eclipse.org/projects/ee4j.jaf, " +
                 "specName=Jakarta Activation, specCode=activation, specVersion=1.2.1, " +
                 "specRepo=null, apiRepo=null, tckRepo=null)", spec.toString());
+    }
+
+    @Test
+    public void createScopes() throws Exception {
+        final List<Spec> specs = Spec.loadTsv();
+
+        final File file = new File("/Users/dblevins/work/jakartaee/specification-tools/boilerplate-specs/src/main/resources/scopes");
+        for (final Spec spec : specs) {
+            final String specCode = spec.getSpecCode();
+            if (specCode == null) continue;
+            final File scope = new File(file, specCode + ".txt");
+            scope.createNewFile();
+        }
     }
 
 }
