@@ -18,7 +18,9 @@ package org.eclipse.jakartaee.tools.bps;
 
 import org.tomitribe.util.collect.ObjectMap;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +43,6 @@ public class Templates {
                 final String formatted = format(raw, map);
 
                 if (raw.equals(formatted)) continue;
-                if (formatted.replace("${", "").contains("{")) continue;
 
                 interpolating = true;
                 entry.setValue(formatted);
@@ -62,7 +63,9 @@ public class Templates {
             final Object value = map.get(key);
             if (value != null) {
                 try {
-                    matcher.appendReplacement(buf, toString(value));
+                    final String replacement = toString(value);
+                    if (replacement.replace("${", "").contains("{")) continue;
+                    matcher.appendReplacement(buf, replacement);
                 } catch (final Exception e) {
                     //Ignore
                 }
@@ -70,5 +73,17 @@ public class Templates {
         }
         matcher.appendTail(buf);
         return buf.toString();
+    }
+
+    static Set<String> references(final String input) {
+        final Set<String> references = new HashSet<>();
+
+        final Matcher matcher = PATTERN.matcher(input);
+        while (matcher.find()) {
+            final String key = matcher.group(2);
+            references.add(key);
+        }
+
+        return references;
     }
 }
