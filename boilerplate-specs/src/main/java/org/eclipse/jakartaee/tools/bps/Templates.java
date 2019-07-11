@@ -35,7 +35,7 @@ public class Templates {
             for (final Map.Entry<String, Object> entry : map.entrySet()) {
                 final Object value = entry.getValue();
 
-                final String raw = value.toString();
+                final String raw = toString(value);
                 final String formatted = format(raw, map);
 
                 if (raw.equals(formatted)) continue;
@@ -47,6 +47,11 @@ public class Templates {
         }
     }
 
+    public static String toString(final Object value) {
+        if (value == null) return "";
+        return value.toString();
+    }
+
     static String format(final String input, final Map<String, Object> map) {
         final Matcher matcher = PATTERN.matcher(input);
         final StringBuffer buf = new StringBuffer();
@@ -55,7 +60,7 @@ public class Templates {
             final Object value = map.get(key);
             if (value != null) {
                 try {
-                    matcher.appendReplacement(buf, value.toString());
+                    matcher.appendReplacement(buf, toString(value));
                 } catch (final Exception e) {
                     //Ignore
                 }

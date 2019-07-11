@@ -38,12 +38,14 @@ public class ExtractParentPom {
                 .watch("\n    <name>", "</name>", pom::setName)
                 .watch("\n    <groupId>jakarta.", "</groupId>", pom::setShortName)
                 .watch("\n    <artifactId>jakarta.", "</artifactId>", pom::setShortName)
+                .watch("\n    <url>https://github.com/eclipse-ee4j/", "</url>", pom::setShortName)
                 .watch("\n    <url>https://projects.eclipse.org/projects/ee4j.", "</url>", pom::setShortName)
                 .watch("\n    <version>", "</version>", pom::setVersion)
                 .watch("\n    <url>", "</url>", pom::setUrl)
                 .watch("\n    <description>", "</description>", pom::setDescription)
-                .watch("<licenses>", "</licenses>", pom::setLicenses)
-                .watch("<scm>", "</scm>", pom::setScm)
+                .watch("\n    <licenses>", "</licenses>", pom::setLicenses)
+                .watch("\n    <scm>", "</scm>", pom::setScm)
+                .watch(">https://github.com/eclipse-ee4j/", "</", pom::setRepoName)
                 .to(new OutputStream() {
                     @Override
                     public void write(final int b) throws IOException {
