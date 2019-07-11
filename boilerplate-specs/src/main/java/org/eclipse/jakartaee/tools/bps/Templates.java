@@ -27,8 +27,10 @@ public class Templates {
     private static final Pattern PATTERN = Pattern.compile("(\\{)(\\w+)(})");
 
     public static void interpolate(final ExtractParentPom.Pom pom) {
-        final ObjectMap map = new ObjectMap(pom);
+        interpolate(new ObjectMap(pom));
+    }
 
+    public static void interpolate(final Map<String, Object> map) {
         boolean interpolating = true;
         while (interpolating) {
             interpolating = false;
@@ -39,7 +41,7 @@ public class Templates {
                 final String formatted = format(raw, map);
 
                 if (raw.equals(formatted)) continue;
-                if (formatted.contains("{")) continue;
+                if (formatted.replace("${", "").contains("{")) continue;
 
                 interpolating = true;
                 entry.setValue(formatted);
