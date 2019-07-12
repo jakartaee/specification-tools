@@ -13,7 +13,7 @@ public class BoilerplateTest {
 
     @Test
     public void testReadme() throws Exception {
-        final File file = getFile("jms-api/pom.xml");
+        final File file = getFile("extractpom/jms-api/pom.xml");
 
         final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
@@ -43,7 +43,7 @@ public class BoilerplateTest {
 
     @Test
     public void testPom() throws Exception {
-        final File file = getFile("jms-api/pom.xml");
+        final File file = getFile("extractpom/jms-api/pom.xml");
 
         final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
@@ -246,7 +246,7 @@ public class BoilerplateTest {
 
     @Test
     public void testAssembly() throws Exception {
-        final File file = getFile("jms-api/pom.xml");
+        final File file = getFile("extractpom/jms-api/pom.xml");
 
         final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
@@ -286,7 +286,7 @@ public class BoilerplateTest {
 
     @Test
     public void testScope() throws Exception {
-        final File file = getFile("jms-api/pom.xml");
+        final File file = getFile("extractpom/jms-api/pom.xml");
 
         final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
@@ -297,7 +297,7 @@ public class BoilerplateTest {
 
     @Test
     public void testSpec() throws Exception {
-        final File file = getFile("jms-api/pom.xml");
+        final File file = getFile("extractpom/jms-api/pom.xml");
 
         final Boilerplate boilerplate = Boilerplate.loadFor(file);
 

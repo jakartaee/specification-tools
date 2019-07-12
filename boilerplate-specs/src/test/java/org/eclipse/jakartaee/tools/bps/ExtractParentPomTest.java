@@ -152,19 +152,19 @@ public class ExtractParentPomTest {
     }
 
     public static void assertExtraction(final String spec) throws IOException {
-        final URL url = Resources.find(spec + "/pom.xml");
+        final URL url = Resources.find("extractpom/" + spec + "/pom.xml");
         final File file = File.createTempFile("pom-before", ".xml");
         file.deleteOnExit();
         IO.copy(url, file);
 
         final String actual = ExtractParentPom.from(file);
-        final String expected = Resources.load(spec + "/pom.after.xml");
+        final String expected = Resources.load("extractpom/" + spec + "/pom.after.xml");
 
 //        final File resources = new File(Dirs.work().parent(), "boilerplate-specs/src/test/resources/");
 //        final File dir = new File(resources, spec);
 //        final File pomAfterXml = new File(dir, "pom.after.xml");
 //        IO.copy(IO.read(actual), pomAfterXml);
 
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 }
