@@ -84,6 +84,20 @@ public class TemplatesTest {
     }
 
     @Test
+    public void ignoreDollarBrace2() throws Exception {
+        final HashMap<String, Object> map = new HashMap<>();
+        map.put("first", "Joe ${nickname}");
+        map.put("last", "Cool");
+        map.put("fullName", "{first} {mi} {last}");
+
+        assertInterpolation(map, "first: Joe ${nickname}\n" +
+                "-------\n" +
+                "fullName: Joe ${nickname} {mi} Cool\n" +
+                "-------\n" +
+                "last: Cool");
+    }
+
+    @Test
     public void unresolvableItemComplex() throws Exception {
         final HashMap<String, Object> map = new HashMap<>();
 
@@ -240,7 +254,7 @@ public class TemplatesTest {
                 "            <artifactId>ca-parent</artifactId>\n" +
                 "            <packaging>pom</packaging>\n" +
                 "            <version>1.3.3-SNAPSHOT</version>\n" +
-                "            <name>{name}</name>\n" +
+                "            <name>${extension.name} API</name>\n" +
                 "            <description>Common Annotations for the JavaTM Platform API</description>\n" +
                 "            <url>https://projects.eclipse.org/projects/ee4j.ca</url>\n" +
                 "        \n" +

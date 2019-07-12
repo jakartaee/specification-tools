@@ -18,9 +18,7 @@ package org.eclipse.jakartaee.tools.bps;
 
 import org.tomitribe.util.collect.ObjectMap;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,34 +54,40 @@ public class Templates {
     }
 
     static String format(final String input, final Map<String, Object> map) {
-        final Matcher matcher = PATTERN.matcher(input);
+
+        final Matcher matcher = PATTERN.matcher(escape(input));
         final StringBuffer buf = new StringBuffer();
         while (matcher.find()) {
             final String key = matcher.group(2);
             final Object value = map.get(key);
             if (value != null) {
                 try {
-                    final String replacement = toString(value);
-                    if (replacement.replace("${", "").contains("{")) continue;
+                    final String replacement = escape(toString(value));
+                    if (replacement.contains("{")) {
+                        continue;
+                    }
                     matcher.appendReplacement(buf, replacement);
                 } catch (final Exception e) {
-                    //Ignore
+                    e.printStackTrace();
                 }
             }
         }
         matcher.appendTail(buf);
-        return buf.toString();
+        final String unescaped = unescape(buf.toString());
+        return unescaped;
     }
 
-    static Set<String> references(final String input) {
-        final Set<String> references = new HashSet<>();
+    /**
+     * Named groups support added in Java 7 means we can't
+     * simply let the user's text through as the Matcher will
+     * treat it as containing named groups and other requests
+     * for further substitution.  All of which is unwanted.
+     */
+    private static String escape(final String input) {
+        return input.replace("${", "\000SC\000");
+    }
 
-        final Matcher matcher = PATTERN.matcher(input);
-        while (matcher.find()) {
-            final String key = matcher.group(2);
-            references.add(key);
-        }
-
-        return references;
+    private static String unescape(final String input) {
+        return input.replace("\000SC\000", "${");
     }
 }
