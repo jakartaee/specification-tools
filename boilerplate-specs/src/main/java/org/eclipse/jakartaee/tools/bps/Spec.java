@@ -64,16 +64,21 @@ public class Spec {
     public static Spec fromTsv(final String row) {
         final String[] column = row.split("\t");
 
-        int i = 0;
-        return Spec.builder()
-                .projectId(column[i++])
-                .projectName(column[i++])
-                .oldProjectName(column[i++])
-                .projectUrl(column[i++])
-                .specName(column[i++])
-                .specCode(column[i++])
-                .specVersion(column[i++])
-                .build();
+        try {
+            int i = 0;
+            return Spec.builder()
+                    .projectId(column[i++])
+                    .projectName(column[i++])
+                    .oldProjectName(column[i++])
+                    .projectUrl(column[i++])
+                    .specName(column[i++])
+                    .specCode(column[i++])
+                    .specVersion(column[i++])
+                    .specRepo(column.length <= i + 5 || "".equals(column[i + 5]) ? null : column[i + 5])
+                    .build();
+        } catch (Exception e) {
+            throw new IllegalArgumentException(row, e);
+        }
     }
 
     public static List<Spec> loadTsv() throws IOException {
