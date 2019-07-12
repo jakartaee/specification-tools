@@ -1,9 +1,14 @@
 package org.eclipse.jakartaee.tools.bps;
 
+import org.apache.openejb.loader.IO;
+import org.junit.Assert;
 import org.junit.Test;
+import org.tomitribe.util.Files;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class AddBoilerplateSpecTest {
 
@@ -148,9 +153,55 @@ public class AddBoilerplateSpecTest {
     }
 
     private void assertSpecFiles(final String spec) throws IOException {
-        final File resources = new File(Dirs.work().parent(), "boilerplate-specs/src/test/resources/genspec-after");
-        final File specDir = new File(resources, spec);
-        AddBoilerplateSpec.createSpecFiles(specDir.toPath());
+        final File tmpdir = Files.tmpdir();
+
+//        final File resources = new File(Dirs.work().parent(), "boilerplate-specs/src/test/resources/genspec-after");
+//        final File specDir = new File(resources, spec);
+//        AddBoilerplateSpec.createSpecFiles(specDir.toPath());
+
+        // Create a clean copy that can be modified
+        final Path specDir = new File(new File(Dirs.work().parent(), "boilerplate-specs/src/test/resources/genspec-before"), spec).toPath();
+        final Path expected = new File(new File(Dirs.work().parent(), "boilerplate-specs/src/test/resources/genspec-after"), spec).toPath();
+
+        final Path actual = tmpdir.toPath();
+
+        copyFolder(specDir, actual);
+
+        // Do the modifications
+        AddBoilerplateSpec.createSpecFiles(actual);
+
+        // Compare with the expected
+        compareFolder(expected, actual);
+    }
+
+
+    public void copyFolder(Path src, Path dest) throws IOException {
+        java.nio.file.Files.walk(src)
+                .forEach(source -> copy(source, dest.resolve(src.relativize(source))));
+    }
+
+    private void copy(Path source, Path dest) {
+        try {
+            java.nio.file.Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    public void compareFolder(Path src, Path dest) throws IOException {
+        java.nio.file.Files.walk(src)
+                .forEach(source -> compare(source, dest.resolve(src.relativize(source))));
+    }
+
+    private void compare(Path expectedPath, Path actualPath) {
+        if (expectedPath.toFile().isDirectory()) return;
+        try {
+            final String expected = IO.slurp(expectedPath.toFile());
+            final String actual = IO.slurp(actualPath.toFile());
+            Assert.assertEquals(expected, actual);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
 }
