@@ -17,25 +17,38 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/
-2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apac
-he.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.eclipse.ee4j</groupId>
         <artifactId>project</artifactId>
         <version>1.0.2</version>
     </parent>
 
-    <groupId>org.glassfish.web</groupId>
-    <artifactId>jstl</artifactId>
-    <version>1.2</version>
+    <groupId>org.eclipse.ee4j.jstl</groupId>
+    <artifactId>jstl-parent</artifactId>
     <packaging>pom</packaging>
+    <version>1.2</version>
     <name>GlassFish JSTL related modules</name>
-    
     <description>JavaServer Pages(TM) Standard Tag Library API</description>
     <url>https://projects.eclipse.org/projects/ee4j.jstl</url>
+
+    <scm>
+        <connection>scm:git:https://github.com/eclipse-ee4j/jstl-api.git</connection>
+        <developerConnection>scm:git:git@github.com:eclipse-ee4j/jstl-api.git</developerConnection>
+        <url>https://github.com/eclipse-ee4j/jstl-api</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <properties>
+        <findbugs.exclude></findbugs.exclude>
+        <findbugs.version>3.0.5</findbugs.version>
+    </properties>
+
+    <modules>
+        <module>api</module>
+    </modules>
 
     <licenses>
         <license>
@@ -50,154 +63,4 @@ he.org/maven-v4_0_0.xsd">
         </license>
     </licenses>
 
-    <scm>
-        <connection>scm:git:https://github.com/eclipse-ee4j/jstl-api.git</connection>
-        <developerConnection>scm:git:git@github.com:eclipse-ee4j/jstl-api.git</developerConnection>
-        <url>https://github.com/eclipse-ee4j/jstl-api</url>
-        <tag>HEAD</tag>
-    </scm>
-
-    <issueManagement>
-        <system>github</system>
-        <url>https://github.com/eclipse-ee4j/jstl-api/issues</url>
-    </issueManagement>
-    <mailingLists>
-        <mailingList>
-            <name>JSTL mailing list</name>
-            <post>jstl-dev@eclipse.org</post>
-            <subscribe>https://dev.eclipse.org/mailman/listinfo/jstl-dev</subscribe>
-            <unsubscribe>https://dev.eclipse.org/mailman/listinfo/jstl-dev</unsubscribe>
-            <archive>https://dev.eclipse.org/mhonarc/lists/jstl-dev</archive>
-        </mailingList>
-    </mailingLists>
-
-    <properties>
-        <findbugs.exclude></findbugs.exclude>
-        <findbugs.version>3.0.5</findbugs.version>
-    </properties>
-
-
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.0.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>${findbugs.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>1.6</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <source>1.5</source>
-                        <target>1.5</target>
-                    </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <configuration>
-                    <includePom>true</includePom>
-                </configuration>
-                <executions>
-                    <execution>
-                       <id>attach-sources</id>
-                       <goals>
-                           <goal>jar-no-fork</goal>
-                       </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <configuration>
-                    <threshold>High</threshold>
-                    <excludeFilterFile>${findbugs.exclude}</excludeFilterFile>
-                    <findbugsXmlOutput>true</findbugsXmlOutput>
-                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-                </configuration>
-            </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-javadoc-plugin</artifactId>
-              <executions>
-                  <execution>
-                      <id>attach-javadocs</id>
-                      <goals>
-                          <goal>jar</goal>
-                      </goals>
-                 </execution>
-              </executions>
-          </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <extensions>
-            <extension>
-                <groupId>org.jvnet.wagon-svn</groupId>
-                <artifactId>wagon-svn</artifactId>
-            </extension>
-        </extensions>
-    </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>${findbugs.version}</version>
-                <configuration>
-                    <threshold>High</threshold>
-                    <excludeFilterFile>${findbugs.exclude}</excludeFilterFile>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
-
-
-    <modules>
-        <module>api</module>
-        <module>impl</module>
-    </modules>
 </project>
-
