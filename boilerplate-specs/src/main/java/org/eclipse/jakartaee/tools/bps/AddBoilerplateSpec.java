@@ -16,8 +16,6 @@
  */
 package org.eclipse.jakartaee.tools.bps;
 
-import org.apache.openejb.loader.Files;
-import org.apache.openejb.loader.IO;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.RefSpec;
@@ -25,6 +23,8 @@ import org.eclipse.jgit.transport.URIish;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
+import org.tomitribe.util.Files;
+import org.tomitribe.util.IO;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,38 +36,48 @@ public class AddBoilerplateSpec {
 
     private static final GitHub github = Env.github();
 
-    public static void main(String[] args) throws Exception {
-        new AddBoilerplateSpec().main("management-api");
+    private final Config config;
+
+    public AddBoilerplateSpec(final Config config) {
+        this.config = config;
     }
 
-    public void main(final String name) throws Exception {
-        main(name, "master");
-        main(name, "EE4J_8");
+    public void run(final String name) throws Exception {
+        for (final String branch : config.getBranches()) {
+            run(name, branch);
+        }
     }
-    public void main(final String name, final String branch) throws Exception {
-        final String master = branch;
+
+    private void run(final String name, final String branch) throws Exception {
 
         final GHOrganization ee4j = github.getOrganization("eclipse-ee4j");
         final GHRepository apiRepo = ee4j.getRepository(name);
 
-        final GHRepository fork = apiRepo.fork();
+        /**
+         * Fork the repo or optionally clone the main repo
+         */
+        final GHRepository fork = (config.isCreateFork()) ? apiRepo.fork() : apiRepo;
+
         final File forks = Files.mkdirs(Dirs.work().forks());
 
         final Git git;
 
-        final File clone = new File(forks, fork.getName() + "-" + master);
+        final File clone = new File(forks, fork.getName() + "-" + branch);
+
+        // Clean up any prior attempts
+        if (config.isDeleteLocal()) Files.remove(clone);
 
         if (!clone.exists()) {
             git = Git.cloneRepository()
                     .setURI(fork.getSshUrl())
-                    .setBranch(master)
+                    .setBranch(branch)
                     .setDirectory(clone)
                     .call();
             git.remoteAdd().setName("eclipse").setUri(new URIish(apiRepo.getSshUrl())).call();
         } else {
             git = Git.open(clone);
             git.remoteAdd().setName("eclipse").setUri(new URIish(apiRepo.getSshUrl())).call();
-            git.pull().setRemote("eclipse").setRemoteBranchName(master).call();
+            git.pull().setRemote("eclipse").setRemoteBranchName(branch).call();
         }
 
         final Path project = clone.toPath();
@@ -88,8 +98,21 @@ public class AddBoilerplateSpec {
 
         createSpecSubmodule(git, project);
 
-//        createPullRequest(git, project, apiRepo, master);
+        final String s = "boilerplate-spec-" + branch;
 
+        /**
+         * We're allowed to push our changes if we've forked
+         */
+        if (config.isPushFork() && config.isCreateFork()) {
+            pushChanges(git, s);
+        }
+
+        /**
+         * Create a PR for our fork (again, only if we forked)
+         */
+        if (config.isCreatePrs() && config.isCreateFork()) {
+            createPullRequest(apiRepo, branch, s);
+        }
     }
 
     /**
@@ -157,11 +180,12 @@ public class AddBoilerplateSpec {
         IO.copy(IO.read(updatedPom), parentPomXml);
     }
 
-    private void createPullRequest(final Git git, final Path project, GHRepository repo, final String branch) throws GitAPIException, IOException {
-        final String s = "boilerplate-spec-" + branch;
+    public void pushChanges(final Git git, final String s) throws GitAPIException {
         git.branchCreate().setName(s).call();
         git.push().setRemote("origin").setRefSpecs(new RefSpec(s + ":" + s)).call();
+    }
 
+    public void createPullRequest(final GHRepository repo, final String branch, final String s) throws IOException {
         repo.createPullRequest("Boilerplate Spec for " + branch + " Branch", "dblevins:" + s, branch, "Generated boilerplate spec.  Feel free to merge, then refine.\n\n See https://wiki.eclipse.org/How_to_Prepare_API_Projects_to_Jakarta_EE_8_Release");
     }
 }
