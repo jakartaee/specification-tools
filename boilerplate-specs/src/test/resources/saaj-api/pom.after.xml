@@ -35,6 +35,18 @@
         <tag>HEAD</tag>
     </scm>
 
+    <properties>
+        <extension.name>jakarta.xml.soap</extension.name>
+        <spec.version>1.5</spec.version>
+        <new.spec.version>1.5.0</new.spec.version>
+        <non.final>false</non.final>
+        <findbugs.exclude>exclude.xml</findbugs.exclude>
+        <findbugs.threshold>Low</findbugs.threshold>
+        <activation.version>1.2.1</activation.version>
+        <legal.doc.source>${project.basedir}</legal.doc.source>
+        <vendor.name>Oracle</vendor.name>
+    </properties>
+
     <modules>
         <module>api</module>
     </modules>

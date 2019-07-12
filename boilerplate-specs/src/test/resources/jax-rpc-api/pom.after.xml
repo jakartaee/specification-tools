@@ -40,6 +40,17 @@
         <url>https://github.com/eclipse-ee4j/jax-rpc-api</url>
     </scm>
 
+    <properties>
+        <extension.name>javax.xml.rpc</extension.name>
+        <spec.version>1.1</spec.version>
+        <bundle.symbolicName>javax.xml.rpc-api</bundle.symbolicName>         
+        <vendor.name>Eclipse Project for Stable EE4J APIs</vendor.name>
+        <implementation.vendor.id>org.glassfish</implementation.vendor.id>
+        <findbugs.version>2.3.1</findbugs.version>
+        <findbugs.exclude>exclude.xml</findbugs.exclude>
+        <findbugs.threshold>Low</findbugs.threshold>
+    </properties>
+
     <modules>
         <module>api</module>
     </modules>

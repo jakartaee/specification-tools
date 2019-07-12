@@ -41,6 +41,16 @@
         <tag>HEAD</tag>
     </scm>
 
+    <properties>
+        <spec.version>2.3</spec.version>
+        <extensionName>javax.servlet.jsp</extensionName>
+        <bundle.symbolicName>javax.servlet.jsp-api</bundle.symbolicName>
+        <vendorName>Eclipse Foundation</vendorName>
+        <findbugs.version>2.5.2</findbugs.version>
+        <findbugs.exclude />
+        <findbugs.threshold>High</findbugs.threshold>
+    </properties>
+
     <modules>
         <module>api</module>
     </modules>

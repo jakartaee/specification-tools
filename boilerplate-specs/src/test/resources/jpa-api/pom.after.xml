@@ -37,6 +37,21 @@
         <tag>HEAD</tag>
     </scm>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <spec.non.final>false</spec.non.final>
+        <spec.version>2.2</spec.version>
+        <spec.build>01</spec.build>
+        <spec.impl.version>2.2.2</spec.impl.version>
+        <spec.api.package>jakarta.persistence</spec.api.package>
+        <spec.new.spec.version>2.3</spec.new.spec.version>
+        <legal.doc.source>${project.basedir}</legal.doc.source>
+        <vendor.name>Oracle</vendor.name>
+    </properties>
+
     <modules>
         <module>api</module>
     </modules>

@@ -41,6 +41,15 @@
         <tag>HEAD</tag>
     </scm>
 
+    <properties>
+        <non.final>false</non.final>
+        <extension.name>javax.interceptor</extension.name>
+        <spec.version>1.2</spec.version>
+        <findbugs.version>3.0.1</findbugs.version>
+        <findbugs.exclude>exclude.xml</findbugs.exclude>
+        <findbugs.threshold>Low</findbugs.threshold>
+    </properties>
+
     <modules>
         <module>api</module>
     </modules>

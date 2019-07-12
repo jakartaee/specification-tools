@@ -43,6 +43,20 @@
         <tag>HEAD</tag>
     </scm>
 
+    <properties>
+        <!-- the bundle build number must be the same as the maven number -->
+        <bundle.version>3.0.0</bundle.version>
+        <!-- The most current api version -->
+        <spec.version>3.0</spec.version>
+        <extensionName>javax.el</extensionName>
+        <bundle.symbolicName>com.sun.el.javax.el</bundle.symbolicName>
+        <vendorName>Oracle Corporation</vendorName>
+        <findbugs.version>2.5.2</findbugs.version>
+        <findbugs.exclude>${project.basedir}/exclude.xml</findbugs.exclude>
+        <findbugs.threshold>High</findbugs.threshold>
+        <tlda-license.url>http://hudson-sca.us.oracle.com/job/tlda-license/lastSuccessfulBuild/artifact</tlda-license.url>
+    </properties>
+
     <modules>
         <module>api</module>
     </modules>

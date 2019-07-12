@@ -40,6 +40,18 @@
         <url>https://github.com/eclipse-ee4j/jaxr-api</url>
     </scm>
 
+    <properties>
+        <non.final>false</non.final>
+        <extension.name>javax.xml.registry</extension.name>
+        <spec.version>1.0</spec.version>
+        <bundle.symbolicName>javax.xml.registry-api</bundle.symbolicName>
+        <vendor.name>Eclipse Project for Stable EE4J APIs</vendor.name>
+        <implementation.vendor.id>org.glassfish</implementation.vendor.id>
+        <findbugs.version>2.3.1</findbugs.version>
+        <findbugs.exclude>exclude.xml</findbugs.exclude>
+        <findbugs.threshold>Low</findbugs.threshold>
+    </properties>
+
     <modules>
         <module>api</module>
     </modules>

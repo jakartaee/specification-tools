@@ -49,6 +49,7 @@ public class ExtractParentPom {
                 .watch("\n    <description>", "</description>", pom::setDescription)
                 .watch("\n    <licenses>", "</licenses>", pom::setLicenses)
                 .watch("\n    <scm>", "</scm>", pom::setScm)
+                .watch("\n    <properties>", "</properties>", pom::setProperties)
                 .watch(">https://github.com/eclipse-ee4j/", "</", pom::setRepoName)
                 .to(new OutputStream() {
                     @Override
@@ -103,6 +104,8 @@ public class ExtractParentPom {
                 "        <version>1.0.5</version>\n" +
                 "    ";
 
+        private String properties = "";
+
         private String repoName = "{shortName}-api";
 
         private String scm = "\n" +
@@ -139,6 +142,8 @@ public class ExtractParentPom {
                 "\n" +
                 "    <scm>{scm}</scm>\n" +
                 "\n" +
+                "{properties}" +
+                "" +
                 "    <modules>\n" +
                 "        <module>api</module>\n" +
                 "    </modules>\n" +
@@ -146,5 +151,9 @@ public class ExtractParentPom {
                 "    <licenses>{licenses}</licenses>\n" +
                 "\n" +
                 "</project>\n";
+
+        public void setProperties(final String props) {
+            this.properties = "    <properties>" + props + "</properties>\n\n";
+        }
     }
 }

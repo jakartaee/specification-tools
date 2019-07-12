@@ -41,6 +41,16 @@
       <tag>HEAD</tag>
   </scm>
 
+    <properties>
+        <non.final>false</non.final>
+        <extension.name>javax.security.auth.message</extension.name>
+        <spec.version>1.1</spec.version>
+        <findbugs.version>3.0.1</findbugs.version>
+        <findbugs.skip>false</findbugs.skip>
+        <findbugs.exclude>exclude-common.xml</findbugs.exclude>
+        <findbugs.threshold>Low</findbugs.threshold>
+    </properties>
+
     <modules>
         <module>api</module>
     </modules>

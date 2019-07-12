@@ -34,6 +34,27 @@
         <url>https://github.com/eclipse-ee4j/jws-api</url>
     </scm>
 
+    <properties>
+        <copyright.ignoreyear>false</copyright.ignoreyear>
+        <copyright.scmonly>true</copyright.scmonly>
+        <copyright.update>false</copyright.update>
+        <spotbugs.skip>false</spotbugs.skip>
+        <spotbugs.threshold>Low</spotbugs.threshold>
+        <spotbugs.version>3.1.11</spotbugs.version>
+
+        <release.spec.feedback>jaxws-dev@eclipse.org</release.spec.feedback>
+        <release.spec.date>Jun 2013</release.spec.date>
+        <non.final>false</non.final>
+        <extension.name>jakarta.jws</extension.name>
+        <spec.version>1.1</spec.version>
+        <implementation.vendor.id>org.glassfish</implementation.vendor.id>
+        <findbugs.version>2.3.1</findbugs.version>
+        <findbugs.exclude>exclude.xml</findbugs.exclude>
+        <findbugs.threshold>Low</findbugs.threshold>
+        <legal.doc.source>${project.basedir}</legal.doc.source>
+        <vendor.name>Oracle Corporation</vendor.name>
+    </properties>
+
     <modules>
         <module>api</module>
     </modules>

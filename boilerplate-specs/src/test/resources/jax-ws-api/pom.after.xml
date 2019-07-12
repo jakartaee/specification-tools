@@ -35,6 +35,29 @@
         <tag>HEAD</tag>
     </scm>
 
+    <properties>
+        <release.spec.title>Maintenance Release</release.spec.title>
+        <release.spec.date>Jul 11, 2017</release.spec.date>
+        <release.spec.feedback>jaxws-dev@eclipse.org</release.spec.feedback>
+
+        <api.package>javax.xml.ws</api.package>
+        <extension.name>jakarta.xml.ws</extension.name>
+        <spec.version>2.4</spec.version>
+        <old.spec.version>2.3</old.spec.version>
+
+        <non.final>false</non.final>
+
+        <findbugs.exclude>${project.basedir}/exclude.xml</findbugs.exclude>
+        <findbugs.threshold>Low</findbugs.threshold>
+        <maven.build.timestamp.format>yyMMdd.HHmm</maven.build.timestamp.format>
+        <legal.doc.source>${project.basedir}/..</legal.doc.source>
+
+        <annotation-api.version>1.3.4</annotation-api.version>
+        <jaxb-api.version>2.3.2</jaxb-api.version>
+        <soap-api.version>1.4.1</soap-api.version>
+        <jws-api.version>1.1.1</jws-api.version>
+    </properties>
+
     <modules>
         <module>api</module>
     </modules>
