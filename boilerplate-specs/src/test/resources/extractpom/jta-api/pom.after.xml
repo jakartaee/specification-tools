@@ -39,7 +39,7 @@
         <developerConnection>scm:git:git@github.com:eclipse-ee4j/jta-api.git</developerConnection>
         <url>https://github.com/eclipse-ee4j/jta-api</url>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <properties>
         <non.final>false</non.final>

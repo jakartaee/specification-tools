@@ -39,7 +39,7 @@
         <developerConnection>scm:git:ssh://git@github.com/eclipse-ee4j/jaspic.git</developerConnection>
         <url>https://github.com/eclipse-ee4j/jaspic</url>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <properties>
         <non.final>false</non.final>

@@ -39,7 +39,7 @@
         <developerConnection>scm:git:ssh://git@github.com/eclipse-ee4j/ejb-api.git</developerConnection>
         <url>https://github.com/eclipse-ee4j/ejb-api</url>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <properties>
         <extension.name>javax.ejb</extension.name>

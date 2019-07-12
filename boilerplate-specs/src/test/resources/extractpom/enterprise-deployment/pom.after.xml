@@ -39,7 +39,7 @@
         <developerConnection>scm:git:ssh://git@github.com/eclipse-ee4j/enterprise-deployment.git</developerConnection>
         <url>https://github.com/eclipse-ee4j/enterprise-deployment</url>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <properties>
         <extension.name>javax.enterprise.deploy</extension.name>
