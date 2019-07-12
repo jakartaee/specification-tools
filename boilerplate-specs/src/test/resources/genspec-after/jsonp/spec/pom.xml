@@ -21,7 +21,6 @@
         <groupId>org.eclipse.ee4j.jsonp</groupId>
         <artifactId>jsonp-parent</artifactId>
         <version>1.2-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>jsonp-spec</artifactId>

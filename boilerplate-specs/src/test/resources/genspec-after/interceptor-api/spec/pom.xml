@@ -21,7 +21,6 @@
         <groupId>org.eclipse.ee4j.interceptor-api</groupId>
         <artifactId>interceptor-api-parent</artifactId>
         <version>1.2.3-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>interceptors-spec</artifactId>

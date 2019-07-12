@@ -21,7 +21,6 @@
         <groupId>org.eclipse.ee4j.el</groupId>
         <artifactId>el-parent</artifactId>
         <version>3.0.1-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>expression-language-spec</artifactId>

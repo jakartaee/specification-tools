@@ -21,7 +21,6 @@
         <groupId>org.eclipse.ee4j.jstl</groupId>
         <artifactId>jstl-parent</artifactId>
         <version>1.2</version>
-        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tags-spec</artifactId>

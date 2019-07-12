@@ -21,7 +21,6 @@
         <groupId>{groupId}</groupId>
         <artifactId>{parentArtifactId}</artifactId>
         <version>1.0.9-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>xml-registries-spec</artifactId>

@@ -21,7 +21,6 @@
         <groupId>org.eclipse.ee4j.jws-api</groupId>
         <artifactId>jws-api-parent</artifactId>
         <version>1.1.1-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>enterprise-ws-spec</artifactId>

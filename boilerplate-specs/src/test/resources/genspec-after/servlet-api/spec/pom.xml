@@ -21,7 +21,6 @@
         <groupId>org.eclipse.ee4j.servlet</groupId>
         <artifactId>servlet-parent</artifactId>
         <version>4.0.2-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>servlet-spec</artifactId>
