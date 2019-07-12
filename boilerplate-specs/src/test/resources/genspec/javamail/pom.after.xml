@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+		Configure SpotBugs to run with "mvn site" and
+		generate html output that can be viewed directly.
+	    -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+	<groupId>org.eclipse.ee4j</groupId>
+	<artifactId>project</artifactId>
+	<version>1.0.4</version>
+    </parent>
+
+    <groupId>{groupId}</groupId>
+    <artifactId>{artifactId}</artifactId>
+    <packaging>pom</packaging>
+    <version>1.6.4-SNAPSHOT</version>
+    <name>Jakarta Mail API distribution</name>
+    <description>${project.name}</description>
+    <url>http://eclipse-ee4j.github.io/mail</url>
+
+    <scm>
+	<connection>scm:git:ssh://git@github.com/eclipse-ee4j/mail.git</connection>
+	<developerConnection>scm:git:ssh://git@github.com/eclipse-ee4j/mail.git</developerConnection>
+	<url>https://github.com/eclipse-ee4j/mail</url>
+    </scm>
+
+    <properties>
+	<mail.version>1.6.4-SNAPSHOT</mail.version>
+	<!-- like mail.version, but with underscores instead of dots -->
+	<mail.zipversion>1_6_4-SNAPSHOT</mail.zipversion>
+	<mail.spec.version>1.6</mail.spec.version>
+	<activation.version>1.2.1</activation.version>
+	<!-- defaults that are overridden in mail module -->
+	<mail.extensionName>
+	    ${project.groupId}.${project.artifactId}
+	</mail.extensionName>
+	<mail.specificationTitle>
+	    ${project.groupId}.${project.artifactId}
+	</mail.specificationTitle>
+	<mail.implementationTitle>
+	    ${project.groupId}.${project.artifactId}
+	</mail.implementationTitle>
+	<mail.bundle.symbolicName>
+	    ${project.groupId}.${project.artifactId}
+	</mail.bundle.symbolicName>
+	<mail.packages.export>
+	    javax.mail.*; version=${mail.spec.version}
+	</mail.packages.export>
+	<mail.packages.import>
+	    javax.activation;version=!,
+	    javax.security.sasl;resolution:=optional,
+	    sun.security.util;resolution:=optional,
+	    *
+	</mail.packages.import>
+	<mail.packages.private>
+	    com.sun.mail.*
+	</mail.packages.private>
+	<mail.probeFile/>
+	<!-- for the osgiversion-maven-plugin -->
+	<hk2.plugin.version>2.0.0</hk2.plugin.version>
+	<javac.path>/opt/jdk1.7/bin/javac</javac.path>
+	<project.build.sourceEncoding>iso-8859-1</project.build.sourceEncoding>
+	<findbugs.threshold>
+	    High
+	</findbugs.threshold>
+	<findbugs.version>
+	    3.1.0
+	</findbugs.version>
+	<findbugs.skip>
+	    true
+	</findbugs.skip>
+	<findbugs.exclude/>
+        <copyright-plugin.version>1.46</copyright-plugin.version>
+    </properties>
+
+    <modules>
+        <module>api</module>
+    </modules>
+
+    <licenses>
+	<license>
+	    <name>EPL 2.0</name>
+	    <url>http://www.eclipse.org/legal/epl-2.0</url>
+	    <distribution>repo</distribution>
+	</license>
+	<license>
+	    <name>GPL2 w/ CPE</name>
+	    <url>https://www.gnu.org/software/classpath/license.html</url>
+	    <distribution>repo</distribution>
+	</license>
+	<license>
+	    <name>EDL 1.0</name>
+	    <url>http://www.eclipse.org/org/documents/edl-v10.php</url>
+	    <distribution>repo</distribution>
+	</license>
+    </licenses>
+
+</project>
