@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+		Configure FindBugs to run with "mvn site" and
+		generate html output that can be viewed directly.
+	    -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.eclipse.ee4j</groupId>
+        <artifactId>project</artifactId>
+        <version>1.0.5</version>
+    </parent>
+
+    <groupId>org.eclipse.ee4j.jaf</groupId>
+    <artifactId>jaf-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>1.2.2-SNAPSHOT</version>
+    <name>JavaBeans Activation Framework distribution</name>
+    <description>${project.name}</description>
+    <url>https://github.com/eclipse-ee4j/jaf</url>
+
+    <scm>
+        <connection>scm:git:ssh://git@github.com/eclipse/jaf.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/eclipse/jaf.git</developerConnection>
+        <url>https://github.com/eclipse-ee4j/jaf</url>
+      <tag>HEAD</tag>
+  </scm>
+
+    <properties>
+	<activation.spec.version>1.2</activation.spec.version>
+	<!-- defaults that are overridden in activation module -->
+	<activation.extensionName>
+	    ${project.groupId}.${project.artifactId}
+	</activation.extensionName>
+	<activation.moduleName>
+	    ${project.groupId}.${project.artifactId}
+	</activation.moduleName>
+	<activation.specificationTitle>
+	    ${project.groupId}.${project.artifactId}
+	</activation.specificationTitle>
+	<activation.implementationTitle>
+	    ${project.groupId}.${project.artifactId}
+	</activation.implementationTitle>
+	<activation.bundle.symbolicName>
+	    ${project.groupId}.${project.artifactId}
+	</activation.bundle.symbolicName>
+	<activation.bundle.symbolicName>
+	    ${project.groupId}.${project.artifactId}
+	</activation.bundle.symbolicName>
+	<activation.packages.export>
+	    javax.activation.*; version=${activation.spec.version}
+	</activation.packages.export>
+	<activation.packages.import>
+	    *
+	</activation.packages.import>
+	<activation.packages.private>
+	    com.sun.activation.*
+	</activation.packages.private>
+	<!-- for the osgiversion-maven-plugin -->
+	<hk2.plugin.version>2.0.0</hk2.plugin.version>
+	<project.build.sourceEncoding>iso-8859-1</project.build.sourceEncoding>
+	<findbugs.threshold>
+	    High
+	</findbugs.threshold>
+	<findbugs.version>
+	    3.0.1
+	</findbugs.version>
+	<findbugs.skip>
+	    true
+	</findbugs.skip>
+	<findbugs.exclude/>
+        <copyright-plugin.version>1.42</copyright-plugin.version>
+    </properties>
+
+    <modules>
+        <module>api</module>
+        <module>spec</module>
+    </modules>
+
+    <licenses>
+        <license>
+            <name>EDL 1.0</name>
+            <url>http://www.eclipse.org/org/documents/edl-v10.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+</project>

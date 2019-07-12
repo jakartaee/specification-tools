@@ -1,0 +1,3 @@
+== Specification Scope
+
+Jakarta Concurrency defines a framework for leveraging concurrency in application components without compromising container integrity while still preserving the Jakarta EE Platform's fundamental benefits.

@@ -1,0 +1,3 @@
+== Specification Scope
+
+Jakarta XML Web Services defines a means for implementing XML-Based Web Services, Web Services Metadata, and SOAP with Attachments.

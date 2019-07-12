@@ -1,0 +1,3 @@
+== Specification Scope
+
+Jakarta XML Binding defines an API and tools that automate the mapping between XML documents and Java objects.
