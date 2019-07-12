@@ -43,11 +43,17 @@ public class Boilerplate {
     private String specAdoc;
     private String themeYaml;
     private String licenseEfslAdoc;
+    private String scopeStatement;
     private byte[] jakartaEeLogoPng;
     private Spec spec;
 
     public static Boilerplate loadFor(final File pomFile) throws IOException {
         final ExtractParentPom.Pom pom = ExtractParentPom.getPom(pomFile);
+
+        // The javamail pom data is not completely accurate
+        if ("mail".equals(pom.getRepoName())) {
+            Javamail.correct(pom);
+        }
 
         final List<Spec> specs = Spec.loadTsv();
 
@@ -60,7 +66,7 @@ public class Boilerplate {
 
         normalizeSpecVersion(data);
 
-        data.put("scopeStatement", load("scopes/" + data.get("specCode") + ".txt"));
+        data.put("scopeStatement", load("scopes/" + data.get("specCode") + ".txt").trim());
         data.put("README.md", load("spec-template/README.md"));
         data.put("pom.xml", load("spec-template/pom.xml"));
         data.put("assembly.xml", load("spec-template/assembly.xml"));
@@ -70,6 +76,7 @@ public class Boilerplate {
         Templates.interpolate(data);
 
         return Boilerplate.builder()
+                .scopeStatement(data.get("scopeStatement").toString())
                 .readmeMd(data.get("README.md").toString())
                 .pomXml(data.get("pom.xml").toString())
                 .assemblyXml(data.get("assembly.xml").toString())
@@ -93,6 +100,9 @@ public class Boilerplate {
         {
             final Optional<Spec> spec = specs.stream()
                     .filter(s -> s != null)
+                    .filter(s -> s.getProjectId() != null)
+                    .filter(s -> pom != null)
+                    .filter(s -> pom.getShortName() != null)
                     .filter(s -> s.getProjectId().contains(pom.getShortName()))
                     .findFirst();
             if (spec.isPresent()) return spec.get();

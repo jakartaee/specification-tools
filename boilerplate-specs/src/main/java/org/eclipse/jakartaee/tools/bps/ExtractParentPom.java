@@ -37,6 +37,7 @@ public class ExtractParentPom {
 
         final InputStream inputStream = IO.read(file);
         new StreamBuilder(inputStream)
+                .replace("\n  <", "\n    <") // javamail descriptor is badly formatted
                 .watch("<!--\n", "-->\n", pom::setHeader)
                 .watch("\n    <parent>", "</parent>", pom::setParent)
                 .watch("\n    <name>", "</name>", pom::setName)
@@ -51,6 +52,7 @@ public class ExtractParentPom {
                 .watch("\n    <scm>", "</scm>", pom::setScm)
                 .watch("\n    <properties>", "</properties>", pom::setProperties)
                 .watch(">https://github.com/eclipse-ee4j/", "</", pom::setRepoName)
+                .watch(">scm:git:git@github.com:eclipse-ee4j/", ".git<", pom::setRepoName)
                 .to(new OutputStream() {
                     @Override
                     public void write(final int b) throws IOException {
@@ -151,6 +153,12 @@ public class ExtractParentPom {
                 "    <licenses>{licenses}</licenses>\n" +
                 "\n" +
                 "</project>\n";
+
+        public void setRepoName(final String repoName) {
+            if (repoName.contains("/")) return;
+            if (repoName.endsWith(".git")) this.repoName = repoName.substring(0, repoName.length() - 4);
+            else this.repoName = repoName;
+        }
 
         public void setProperties(final String props) {
             this.properties = "    <properties>" + props + "</properties>\n\n";
