@@ -117,6 +117,20 @@ public class AddBoilerplateSpec {
 
     private void createSpecSubmodule(final Git git, final Path project) throws IOException, GitAPIException {
 
+        createSpecFiles(project);
+
+        commitSpecFiles(git);
+
+    }
+
+    private static void commitSpecFiles(final Git git) throws GitAPIException {
+        git.add().addFilepattern("spec").call();
+        git.commit()
+                .setMessage("Add spec/ submodule with boilerplate asciidoc")
+                .setAll(true).call();
+    }
+
+    public static void createSpecFiles(final Path project) throws IOException {
         final Path spec = createDirectory(project.resolve("spec"));
         final Path src = createDirectory(project.resolve("spec/src"));
         final Path main = createDirectory(project.resolve("spec/src/main"));
@@ -141,12 +155,6 @@ public class AddBoilerplateSpec {
         final String updatedPom = IO.slurp(parentPomXml)
                 .replaceAll("(        <module>api</module>\n)", "$1        <module>spec</module>\n");
         IO.copy(IO.read(updatedPom), parentPomXml);
-
-        git.add().addFilepattern("spec").call();
-        git.commit()
-                .setMessage("Add spec/ submodule with boilerplate asciidoc")
-                .setAll(true).call();
-
     }
 
     private void createPullRequest(final Git git, final Path project, GHRepository repo, final String branch) throws GitAPIException, IOException {

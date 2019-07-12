@@ -86,6 +86,13 @@ public class Boilerplate {
         {
             final Optional<Spec> spec = specs.stream()
                     .filter(s -> s != null)
+                    .filter(s -> pom.getRepoName().equals(s.getSpecRepo()))
+                    .findFirst();
+            if (spec.isPresent()) return spec.get();
+        }
+        {
+            final Optional<Spec> spec = specs.stream()
+                    .filter(s -> s != null)
                     .filter(s -> s.getProjectId().contains(pom.getShortName()))
                     .findFirst();
             if (spec.isPresent()) return spec.get();

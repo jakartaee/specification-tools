@@ -24,9 +24,10 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExtractParentPomTestCases {
+public class GenerateTestCases {
 
-    private final List<String> list = Arrays.asList("common-annotations-api",
+    private final List<String> list = Arrays.asList(
+            "common-annotations-api",
             "concurrency-api",
             "ejb-api",
             "el-ri",
@@ -58,7 +59,7 @@ public class ExtractParentPomTestCases {
     );
 
     public static void main(String[] args) throws Exception {
-        final ExtractParentPomTestCases generator = new ExtractParentPomTestCases();
+        final GenerateTestCases generator = new GenerateTestCases();
         generator.collectTestFiles();
         generator.generateTestMethod();
     }
