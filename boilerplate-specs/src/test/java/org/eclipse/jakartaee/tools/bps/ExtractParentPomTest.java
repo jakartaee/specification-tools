@@ -160,12 +160,10 @@ public class ExtractParentPomTest {
         final String actual = ExtractParentPom.from(file);
         final String expected = Resources.load(spec + "/pom.after.xml");
 
-//        if (expected.length() == 0) {
-//            final File resources = new File(Dirs.work().parent(), "boilerplate-specs/src/test/resources/");
-//            final File dir = new File(resources, spec);
-//            final File pomAfterXml = new File(dir, "pom.after.xml");
-//            IO.copy(IO.read(actual), pomAfterXml);
-//        }
+//        final File resources = new File(Dirs.work().parent(), "boilerplate-specs/src/test/resources/");
+//        final File dir = new File(resources, spec);
+//        final File pomAfterXml = new File(dir, "pom.after.xml");
+//        IO.copy(IO.read(actual), pomAfterXml);
 
         assertEquals(actual, expected);
     }

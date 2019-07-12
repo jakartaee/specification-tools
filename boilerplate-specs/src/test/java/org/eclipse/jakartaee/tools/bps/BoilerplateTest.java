@@ -6,7 +6,6 @@ import org.tomitribe.util.IO;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -16,7 +15,7 @@ public class BoilerplateTest {
     public void testReadme() throws Exception {
         final File file = getFile("jms-api/pom.xml");
 
-        final Map<String, Object> data = Boilerplate.loadTemplatesFor(file);
+        final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
         assertEquals("Jakarta Messaging Specification\n" +
                 "============================\n" +
@@ -39,16 +38,16 @@ public class BoilerplateTest {
                 "- `target/generated-docs/messaging-spec-<version>.html`\n" +
                 "\n" +
                 "Locate the PDF files:\n" +
-                "- `target/generated-docs/messaging-spec-<version>.pdf`\n", data.get("README.md"));
+                "- `target/generated-docs/messaging-spec-<version>.pdf`\n", boilerplate.getReadmeMd());
     }
 
     @Test
     public void testPom() throws Exception {
         final File file = getFile("jms-api/pom.xml");
 
-            final Boilerplate boilerplate = Boilerplate.loadFor(file);
+        final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
-            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<!--\n" +
                 "\n" +
                 "    Copyright (c) 2019 Contributors to the Eclipse Foundation.\n" +
@@ -249,9 +248,9 @@ public class BoilerplateTest {
     public void testAssembly() throws Exception {
         final File file = getFile("jms-api/pom.xml");
 
-            final Boilerplate boilerplate = Boilerplate.loadFor(file);
+        final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
-            assertEquals("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" +
+        assertEquals("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" +
                 "<!--\n" +
                 " \n" +
                 "    Copyright (c) 2019 Contributors to the Eclipse Foundation.\n" +
@@ -289,20 +288,20 @@ public class BoilerplateTest {
     public void testScope() throws Exception {
         final File file = getFile("jms-api/pom.xml");
 
-            final Boilerplate boilerplate = Boilerplate.loadFor(file);
+        final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
-            assertEquals("== Specification Scope\n" +
-                    "\n" +
-                    "Jakarta Messaging describes a means for Java applications to create, send, and receive messages via loosely coupled, reliable asynchronous communication services.\n", boilerplate.getScopeAdoc());
+        assertEquals("== Specification Scope\n" +
+                "\n" +
+                "Jakarta Messaging describes a means for Java applications to create, send, and receive messages via loosely coupled, reliable asynchronous communication services.\n", boilerplate.getScopeAdoc());
     }
 
     @Test
     public void testSpec() throws Exception {
         final File file = getFile("jms-api/pom.xml");
 
-            final Boilerplate boilerplate = Boilerplate.loadFor(file);
+        final Boilerplate boilerplate = Boilerplate.loadFor(file);
 
-            assertEquals("//\n" +
+        assertEquals("//\n" +
                 "// Copyright (c) 2017, 2019 Contributors to the Eclipse Foundation\n" +
                 "//\n" +
                 "\n" +
@@ -325,7 +324,7 @@ public class BoilerplateTest {
                 "\n" +
                 "// == License\n" +
                 ":sectnums!:\n" +
-                    "include::license-efsl.adoc[]\n" +
+                "include::license-efsl.adoc[]\n" +
                 "\n" +
                 "// == Scope\n" +
                 ":sectnums:\n" +

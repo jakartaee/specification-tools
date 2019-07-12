@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-{header}-->
+		Configure FindBugs to run with "mvn site" and
+		generate html output that can be viewed directly.
+	    -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>{parent}</parent>
+    <parent>
+        <groupId>org.eclipse.ee4j</groupId>
+        <artifactId>project</artifactId>
+        <version>1.0.5</version>
+    </parent>
 
-    <groupId>{groupId}</groupId>
-    <artifactId>{artifactId}</artifactId>
+    <groupId>org.eclipse.ee4j.jaf</groupId>
+    <artifactId>jaf-parent</artifactId>
     <packaging>pom</packaging>
-    <version>{version}</version>
-    <name>{name}</name>
-    <description>{description}</description>
-    <url>{url}</url>
+    <version>1.2.2-SNAPSHOT</version>
+    <name>JavaBeans Activation Framework distribution</name>
+    <description>${project.name}</description>
+    <url>https://github.com/eclipse-ee4j/jaf</url>
 
-    <scm>{scm}</scm>
+    <scm>
+        <connection>scm:git:ssh://git@github.com/eclipse/jaf.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/eclipse/jaf.git</developerConnection>
+        <url>https://github.com/eclipse-ee4j/jaf</url>
+      <tag>HEAD</tag>
+  </scm>
 
     <modules>
         <module>api</module>
     </modules>
 
-    <licenses>{licenses}</licenses>
+    <licenses>
+        <license>
+            <name>EDL 1.0</name>
+            <url>http://www.eclipse.org/org/documents/edl-v10.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
 </project>

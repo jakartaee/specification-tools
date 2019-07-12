@@ -37,7 +37,7 @@ public class AddBoilerplateSpec {
     private static final GitHub github = Env.github();
 
     public static void main(String[] args) throws Exception {
-        new AddBoilerplateSpec().main("jms-api");
+        new AddBoilerplateSpec().main("management-api");
     }
 
     public void main(final String name) throws Exception {
@@ -88,7 +88,7 @@ public class AddBoilerplateSpec {
 
         createSpecSubmodule(git, project);
 
-        createPullRequest(git, project, apiRepo, master);
+//        createPullRequest(git, project, apiRepo, master);
 
     }
 

@@ -1,26 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-{header}-->
+
+    Copyright (c) 2013, 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>{parent}</parent>
+    <parent>
+        <groupId>org.eclipse.ee4j</groupId>
+        <artifactId>project</artifactId>
+        <version>1.0.5</version>
+    </parent>
 
-    <groupId>{groupId}</groupId>
-    <artifactId>{artifactId}</artifactId>
+    <groupId>org.eclipse.ee4j.xml.soap-api</groupId>
+    <artifactId>xml.soap-api-parent</artifactId>
     <packaging>pom</packaging>
-    <version>{version}</version>
-    <name>{name}</name>
-    <description>{description}</description>
-    <url>{url}</url>
+    <version>1.5.0-SNAPSHOT</version>
+    <name>${extension.name} API</name>
+    <description>SAAJ API - Provides the API for creating and building SOAP messages.</description>
+    <url>https://projects.eclipse.org/proposals/eclipse-project-jax-ws</url>
 
-    <scm>{scm}</scm>
+    <scm>
+        <connection>scm:git:git://github.com/eclipse-ee4j/saaj-api.git</connection>
+        <developerConnection>scm:git:git@github.com/eclipse-ee4j/saaj-api.git</developerConnection>
+        <url>https://github.com/eclipse-ee4j/saaj-api</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <modules>
         <module>api</module>
     </modules>
 
-    <licenses>{licenses}</licenses>
+    <licenses>
+        <license>
+            <name>Eclipse Distribution License - v 1.0</name>
+            <url>http://www.eclipse.org/org/documents/edl-v10.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
 </project>

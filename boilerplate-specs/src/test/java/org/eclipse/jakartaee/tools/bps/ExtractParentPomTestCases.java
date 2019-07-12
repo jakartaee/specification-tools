@@ -17,7 +17,6 @@
 package org.eclipse.jakartaee.tools.bps;
 
 import org.apache.openejb.loader.IO;
-import org.junit.Test;
 import org.tomitribe.util.Files;
 import org.tomitribe.util.Strings;
 

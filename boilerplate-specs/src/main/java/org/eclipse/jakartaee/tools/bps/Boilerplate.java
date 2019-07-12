@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Data
 @Builder
@@ -50,10 +51,7 @@ public class Boilerplate {
 
         final List<Spec> specs = Spec.loadTsv();
 
-        final Spec spec = specs.stream()
-                .filter(s -> s.getProjectId().contains(pom.getShortName()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Cannot find a spec descriptor for " + pom.getShortName()));
+        final Spec spec = getSpec(pom, specs);
 
         final Map<String, Object> data = new HashMap<>();
         data.putAll(new ObjectMap(pom));
@@ -84,33 +82,33 @@ public class Boilerplate {
                 .build();
     }
 
+    public static Spec getSpec(final ExtractParentPom.Pom pom, final List<Spec> specs) {
+        {
+            final Optional<Spec> spec = specs.stream()
+                    .filter(s -> s != null)
+                    .filter(s -> s.getProjectId().contains(pom.getShortName()))
+                    .findFirst();
+            if (spec.isPresent()) return spec.get();
+        }
+        {
+            final Optional<Spec> spec = specs.stream()
+                    .filter(s -> s != null)
+                    .filter(s -> s.getSpecCode().toLowerCase().contains(pom.getShortName().toLowerCase()))
+                    .findFirst();
+            if (spec.isPresent()) return spec.get();
+        }
+        {
+            final Optional<Spec> spec = specs.stream()
+                    .filter(s -> s != null)
+                    .filter(s -> s.getProjectName().toLowerCase().contains(pom.getShortName().toLowerCase()))
+                    .findFirst();
+            if (spec.isPresent()) return spec.get();
+        }
 
-    public static Map<String, Object> loadTemplatesFor(final File file) throws IOException {
-        final ExtractParentPom.Pom pom = ExtractParentPom.getPom(file);
 
-        final List<Spec> specs = Spec.loadTsv();
-
-        final Spec spec = specs.stream()
-                .filter(s -> s.getProjectId().contains(pom.getShortName()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Cannot find a spec descriptor for " + pom.getShortName()));
-
-        final Map<String, Object> data = new HashMap<>();
-        data.putAll(new ObjectMap(pom));
-        data.putAll(new ObjectMap(spec));
-        data.put("parentArtifactId", data.remove("artifactId"));
-
-        normalizeSpecVersion(data);
-
-        data.put("README.md", load("spec-template/README.md"));
-        data.put("pom.xml", load("spec-template/pom.xml"));
-        data.put("assembly.xml", load("spec-template/assembly.xml"));
-        data.put("scope.adoc", load("spec-template/src/main/asciidoc/scope.adoc"));
-        data.put("spec.adoc", load("spec-template/src/main/asciidoc/wombat-spec.adoc"));
-
-        Templates.interpolate(data);
-        return data;
+        throw new IllegalStateException("Cannot find a spec descriptor for " + pom.getShortName());
     }
+
 
     public static String load(final String name) throws IOException {
         return IO.slurp(Boilerplate.class.getClassLoader().getResource(name));
