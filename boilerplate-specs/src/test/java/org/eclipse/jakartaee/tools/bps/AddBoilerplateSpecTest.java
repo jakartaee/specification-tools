@@ -148,7 +148,7 @@ public class AddBoilerplateSpecTest {
     }
 
     private void assertSpecFiles(final String spec) throws IOException {
-        final File resources = new File(Dirs.work().parent(), "boilerplate-specs/src/test/resources/genspec");
+        final File resources = new File(Dirs.work().parent(), "boilerplate-specs/src/test/resources/genspec-after");
         final File specDir = new File(resources, spec);
         AddBoilerplateSpec.createSpecFiles(specDir.toPath());
     }
