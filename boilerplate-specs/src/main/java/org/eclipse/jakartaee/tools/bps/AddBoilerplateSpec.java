@@ -21,6 +21,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.URIish;
 import org.kohsuke.github.GHOrganization;
+import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.tomitribe.util.Files;
@@ -96,6 +97,13 @@ public class AddBoilerplateSpec {
             createApiSubmodule(git, project);
         }
 
+        /**
+         * if it is a single module project, make it multi-module
+         */
+        if (!project.resolve("pom.xml").toFile().exists()) {
+            createParentPom(git, project);
+        }
+
         createSpecSubmodule(git, project);
 
         final String s = "boilerplate-spec-" + branch;
@@ -125,7 +133,11 @@ public class AddBoilerplateSpec {
         java.nio.file.Files.move(project.resolve("pom.xml"), api.resolve("pom.xml"));
         git.add().addFilepattern("api").call();
         git.commit()
-                .setMessage("Move src/ to an new api/src/ submodule")
+                .setMessage("" +
+                        "Move src/ to an new api/src/ submodule" +
+                        "\n" +
+                        "\n" +
+                        "Signed-off-by: David Blevins <david.blevins@gmail.com>\n")
                 .setAll(true).call();
 
         final String parent = ExtractParentPom.from(api.resolve("pom.xml").toFile());
@@ -133,7 +145,31 @@ public class AddBoilerplateSpec {
 
         git.add().addFilepattern("pom.xml").call();
         git.commit()
-                .setMessage("New parent pom.xml")
+                .setMessage("New parent pom.xml" +
+                        "\n" +
+                        "\n" +
+                        "Signed-off-by: David Blevins <david.blevins@gmail.com>\n")
+                .setAll(true).call();
+    }
+
+    /**
+     * Move the `src` directory into an `api` submodule, add a parent pom and commit it
+     */
+    public void createParentPom(final Git git, final Path project) throws IOException, GitAPIException {
+        final Path api = project.resolve("api");
+        final File apiPom = api.resolve("pom.xml").toFile();
+
+        if (!apiPom.exists()) throw new IllegalStateException("No api/pom.xml file to copy");
+
+        final String parent = ExtractParentPom.from(apiPom);
+        IO.copy(IO.read(parent), project.resolve("pom.xml").toFile());
+
+        git.add().addFilepattern("pom.xml").call();
+        git.commit()
+                .setMessage("New parent pom.xml" +
+                        "\n" +
+                        "\n" +
+                        "Signed-off-by: David Blevins <david.blevins@gmail.com>\n")
                 .setAll(true).call();
     }
 
@@ -149,7 +185,10 @@ public class AddBoilerplateSpec {
     private static void commitSpecFiles(final Git git) throws GitAPIException {
         git.add().addFilepattern("spec").call();
         git.commit()
-                .setMessage("Add spec/ submodule with boilerplate asciidoc")
+                .setMessage("Add spec/ submodule with boilerplate asciidoc" +
+                        "\n" +
+                        "\n" +
+                        "Signed-off-by: David Blevins <david.blevins@gmail.com>\n")
                 .setAll(true).call();
     }
 
@@ -186,6 +225,14 @@ public class AddBoilerplateSpec {
     }
 
     public void createPullRequest(final GHRepository repo, final String branch, final String s) throws IOException {
-        repo.createPullRequest("Boilerplate Spec for " + branch + " Branch", "dblevins:" + s, branch, "Generated boilerplate spec.  Feel free to merge, then refine.\n\n See https://wiki.eclipse.org/How_to_Prepare_API_Projects_to_Jakarta_EE_8_Release");
+        final GHPullRequest pullRequest = repo.createPullRequest("Boilerplate Spec for " + branch + " Branch", "dblevins:" + s, branch, "Generated boilerplate spec.  Feel free to merge, then refine.\n\n See https://wiki.eclipse.org/How_to_Prepare_API_Projects_to_Jakarta_EE_8_Release");
+        try {
+            System.out.println("HtmlUrl: " + pullRequest.getHtmlUrl());
+        } catch (Exception e) {
+        }
+        try {
+            System.out.println("URL: " + pullRequest.getUrl());
+        } catch (Exception e) {
+        }
     }
 }
