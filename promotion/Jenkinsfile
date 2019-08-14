@@ -1,0 +1,41 @@
+pipeline {
+    agent {
+        label "migration"
+    }
+
+    parameters {
+      string (
+             name : 'SPEC_NAME',
+             description: 'The short name of the specification as used in URLs, such as dependency-injection',
+             defaultValue: 'latest'
+           )
+      string (
+             name : 'SPEC_VERSION',
+             description: 'The two-digit version number of the specification as used in URLs, such as 1.0',
+             defaultValue: 'latest'
+           )
+      string (
+              name : 'TCK_BINARY_URL',
+              description: 'The public HTTP URL where the TCK binary is staged.',
+              defaultValue: ''
+            )
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/jakartaee/specification-tools.git']]]
+              }
+            }
+        }
+
+        stage('List') {
+            steps {
+                sh 'pwd'
+                sh 'ls -la'
+                sh 'export'
+            }
+        }
+    }
+}
