@@ -6,11 +6,11 @@ source "$(dirname $0)/utils.sh"
 
 ##[ Required Environment ]#######
 
-require KEYRING
-require PASSPHRASE
 require SPEC_NAME "[a-z][a-z-]*[a-z]"
 require SPEC_VERSION "[1-9][0-9.]*"
 require TCK_BINARY_URL "https?://download.eclipse.org/.*\.(zip|tar.gz)"
+require PASSPHRASE
+require KEYRING
 
 ##[ Main ]#######################
 
