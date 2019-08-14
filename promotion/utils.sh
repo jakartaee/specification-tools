@@ -25,8 +25,8 @@ function require {
     [ -n "$value" ] || fail "$name environment variable was not set"
 
     # (optional) Match against a regex and fail if it doesn't match
-    [ -n "$regex" ] && {
+    if [ -n "$regex" ]; then
 	echo "$value" | egrep --silent "^$regex$" ||
 	    fail "$name value \"$value\" does not match pattern \"$regex\""
-    }
+    fi
 }
