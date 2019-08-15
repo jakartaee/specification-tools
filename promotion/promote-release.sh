@@ -57,11 +57,11 @@ require TCK_BINARY_URL "https?://download.eclipse.org/.*\.(zip|tar.gz)"
 	ssh "$HOST" "ls -la $ZONE" || fail "Remote directory missing \"$ZONE\""
 
 	# do a simple ssh test to flush out basic issues
-	ssh "$HOST" "touch $ZONE/status" || fail "Remote directory write access denied to \"$ZONE\""
+	ssh "$HOST" "touch ${ZONE}status" || fail "Remote directory write access denied to \"$ZONE\""
     )
     
     # make the remote directory, if needed
-    ssh "$HOST" "[ ! -e $DROP ] && mkdir -p $DROP" || fail "Remote directory \"$DROP\" could not be created"
+    ssh "$HOST" "[ -e $DROP ] || mkdir -p $DROP" || fail "Remote directory \"$DROP\" could not be created"
 
     # If any of the files already exist, fail before we've copied anything
     for file in "$DROP$TCK"{,.sig,sha256}; do
