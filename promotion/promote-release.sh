@@ -57,7 +57,7 @@ require TCK_BINARY_URL "https?://download.eclipse.org/.*\.(zip|tar.gz)"
 	ssh "$HOST" "ls -la $ZONE" || fail "Remote directory missing \"$ZONE\""
 
 	# do a simple ssh test to flush out basic issues
-	ssh "$HOST" "touch ${ZONE}status" || fail "Remote directory write access denied to \"$ZONE\""
+	ssh "$HOST" "touch ${ZONE}status && rm ${ZONE}status" || fail "Remote directory write access denied to \"$ZONE\""
     )
     
     # make the remote directory, if needed
