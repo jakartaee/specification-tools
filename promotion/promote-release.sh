@@ -43,7 +43,7 @@ require TCK_BINARY_URL "https?://download.eclipse.org/.*\.(zip|tar.gz)"
     gpg --verify "$TCK".sig "$TCK" || fail "Signature Verification failed"
 
     # Calculate the sha256 for convenience
-    shasum -a 256 "$TCK" | tr ' ' '\t' | cut -f 1 > "$TCK.sha256"
+    shasum -a 256 "$TCK" | tr ' ' '\t' | cut -f 1 > "$TCK.sha256" || fail "SHA-256 creation failed"
 
     ZONE="/home/data/httpd/download.eclipse.org/jakartaee/"
     DROP="/home/data/httpd/download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/"
@@ -69,7 +69,7 @@ require TCK_BINARY_URL "https?://download.eclipse.org/.*\.(zip|tar.gz)"
     done
 
     # Ok, we're clear to copy for real
-    for file in "$TCK"{,.sig,sha256}; do
+    for file in "$TCK"{,.sig,.sha256}; do
 	echo "Uploading $DROP/$file"
 	scp "$file" "$HOST:$DROP" 
     done
