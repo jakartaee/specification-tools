@@ -17,16 +17,13 @@ function fail {
 function require {
     local name="${1?Specify a variable name}"
     local regex="$2"
-    unset value;
-    # get the value of the variable
-    eval "value=\"${!name}\""
-    
+
     # Fail if the variable name doesn't exist
-    [ -n "$value" ] || fail "$name environment variable was not set"
+    [ -n "${!name}" ] || fail "$name environment variable was not set"
 
     # (optional) Match against a regex and fail if it doesn't match
     if [ -n "$regex" ]; then
-	echo "$value" | egrep --silent "^$regex$" ||
-	    fail "$name value \"$value\" does not match pattern \"$regex\""
+	echo "${!name}" | egrep --silent "^$regex$" ||
+	    fail "$name value \"${!name}\" does not match pattern \"$regex\""
     fi
 }
