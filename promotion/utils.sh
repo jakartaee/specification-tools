@@ -17,7 +17,7 @@ function fail {
 function require {
     local name="${1?Specify a variable name}"
     local regex="$2"
-
+    unset value;
     # get the value of the variable
     eval "value=\"${!name}\""
     
