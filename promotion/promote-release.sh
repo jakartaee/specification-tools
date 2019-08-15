@@ -45,11 +45,20 @@ require TCK_BINARY_URL "https?://download.eclipse.org/.*\.(zip|tar.gz)"
     # Calculate the sha256 for convenience
     shasum -a 256 "$TCK" | tr ' ' '\t' | cut -f 1 > "$TCK.sha256"
 
+    ZONE="/home/data/httpd/download.eclipse.org/jakartaee/"
     DROP="/home/data/httpd/download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/"
     HOST='genie.jakartaee-spec-committee@projects-storage.eclipse.org'
 
-    # do a simple ssh test to flush out basic issues
-    ssh "$HOST" "uname -a" || fail "Unable to SSH to download server. See setup instructions https://wiki.eclipse.org/Jenkins#Freestyle_job"
+    ( # Test SSH access and write access
+	
+	# do a simple ssh test to flush out basic issues
+	ssh "$HOST" "uname -a" || fail "Unable to SSH to download server. See setup instructions https://wiki.eclipse.org/Jenkins#Freestyle_job"
+	# do a simple ssh test to flush out basic issues
+	ssh "$HOST" "ls -la $ZONE" || fail "Remote directory missing \"$ZONE\""
+
+	# do a simple ssh test to flush out basic issues
+	ssh "$HOST" "touch $ZONE/status" || fail "Remote directory write access denied to \"$ZONE\""
+    )
     
     # make the remote directory, if needed
     ssh "$HOST" "[ ! -e $DROP ] && mkdir -p $DROP" || fail "Remote directory \"$DROP\" could not be created"
