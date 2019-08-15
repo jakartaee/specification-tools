@@ -45,7 +45,7 @@ require TCK_BINARY_URL "https?://download.eclipse.org/.*\.(zip|tar.gz)"
     # Calculate the sha256 for convenience
     shasum -a 256 "$TCK" | tr ' ' '\t' | cut -f 1 > "$TCK.sha256"
 
-    DROP="/home/data/httpd/download.eclipse.org/jakartaee/${SPEC_NAME}/$SPEC_VERSION}/"
+    DROP="/home/data/httpd/download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/"
     HOST='genie.jakartaee-spec-committee@projects-storage.eclipse.org'
 
     # do a simple ssh test to flush out basic issues
