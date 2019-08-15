@@ -19,7 +19,7 @@ function require {
     local regex="$2"
 
     # get the value of the variable
-    eval "value=${!name}"
+    eval "value=\"${!name}\""
     
     # Fail if the variable name doesn't exist
     [ -n "$value" ] || fail "$name environment variable was not set"
