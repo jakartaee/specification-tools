@@ -10,7 +10,7 @@ require KEYRING
 require PASSPHRASE
 require SPEC_NAME "[a-z][a-z-]*[a-z]"
 require SPEC_VERSION "[1-9][0-9.]*"
-require TCK_BINARY_URL "https?://download.eclipse.org/.*\.(zip|tar.gz)"
+require FILE_URL "https?://download.eclipse.org/.*\.(zip|tar.gz|pdf|jar|war|ear)"
 
 ##[ Main ]#######################
 
@@ -19,8 +19,8 @@ require TCK_BINARY_URL "https?://download.eclipse.org/.*\.(zip|tar.gz)"
     gpg --batch --import "${KEYRING}"
     # Iterate over each of the imported private keys and mark them trusted
     for key in $(gpg --list-keys --with-colons | tr ':' '\t' | grep '^fpr' | cut -f 10); do
-	# The echo statement handles providing two values to an interactive prompt
-	echo -e "5\ny\n" |  gpg --batch --command-fd 0 --expert --edit-key "$key" trust;
+    # The echo statement handles providing two values to an interactive prompt
+    echo -e "5\ny\n" |  gpg --batch --command-fd 0 --expert --edit-key "$key" trust;
     done
 )
 
@@ -28,77 +28,102 @@ require TCK_BINARY_URL "https?://download.eclipse.org/.*\.(zip|tar.gz)"
     TMP="/tmp/download-$$" && mkdir "$TMP" && cd "$TMP"
 
     # Local file name of the TCK zip or tar.gz
-    TCK="$(basename "$TCK_BINARY_URL")"
-
-    # If the tck starts with "eclipse-" rename it "jakarta-"
-    TCK="${TCK/eclipse-/jakarta-}"
+    FILE="$(basename "$FILE_URL")"
 
     # Download the TCK or fail
-    curl "$TCK_BINARY_URL" > "$TCK" || fail "Could not download $TCK_BINARY_URL"
+    curl "$FILE_URL" > "$FILE" || fail "Could not download $FILE_URL"
 
-    # Sign the TCK or fail
-    echo "${PASSPHRASE}" | gpg --sign --armor --batch --passphrase-fd 0 --output "$TCK".sig --detach-sig "$TCK" || fail "Signature failed"
+    # If the tck starts with "eclipse-" rename it "jakarta-"
+    [[ $FILE == eclipse-* ]] && cp $FILE ${FILE/eclipse-/jakarta-}
 
-    # Verify the signature to be safe
-    gpg --verify "$TCK".sig "$TCK" || fail "Signature Verification failed"
+    ( # Hash and sign
 
-    # Calculate the sha256 for convenience
-    shasum -a 256 "$TCK" | tr ' ' '\t' | cut -f 1 > "$TCK.sha256" || fail "SHA-256 creation failed"
+        for file in *; do
+            # Sign the TCK or fail
+            echo "${PASSPHRASE}" | gpg --sign --armor --batch --passphrase-fd 0 --output "$file".sig --detach-sig "$file" || fail "Signature failed"
+
+            # Verify the signature to be safe
+            gpg --verify "$file".sig "$file" || fail "Signature Verification failed for \"$file\""
+
+            # Calculate the sha256 for convenience
+            shasum -a 256 "$file" | tr ' ' '\t' | cut -f 1 > "$file.sha256" || fail "SHA-256 creation failed for \"$file\""
+        done
+    )
 
     ZONE="/home/data/httpd/download.eclipse.org/jakartaee/"
-    DROP="/home/data/httpd/download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/"
+    DROP="/home/data/httpd/download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}"
     HOST='genie.jakartaee-spec-committee@projects-storage.eclipse.org'
 
-    ( # Test SSH access and write access
-	
-	# do a simple ssh test to flush out basic issues
-	ssh "$HOST" "uname -a" || fail "Unable to SSH to download server. See setup instructions https://wiki.eclipse.org/Jenkins#Freestyle_job"
-	# do a simple ssh test to flush out basic issues
-	ssh "$HOST" "ls -la $ZONE" || fail "Remote directory missing \"$ZONE\""
+    ( # Test SSH access and write permissions
 
-	# do a simple ssh test to flush out basic issues
-	ssh "$HOST" "touch ${ZONE}status && rm ${ZONE}status" || fail "Remote directory write access denied to \"$ZONE\""
+        # do a simple ssh test to flush out basic issues
+        ssh "$HOST" "uname -a" || fail "Unable to SSH to download server. See setup instructions https://wiki.eclipse.org/Jenkins#Freestyle_job"
+        # do a simple ssh test to flush out basic issues
+        ssh "$HOST" "ls -la $ZONE" || fail "Remote directory missing \"$ZONE\""
+
+        # do a simple ssh test to flush out basic issues
+        ssh "$HOST" "touch ${ZONE}status && rm ${ZONE}status" || fail "Remote directory write access denied to \"$ZONE\""
     )
-    
-    # make the remote directory, if needed
-    ssh "$HOST" "[ -e $DROP ] || mkdir -p $DROP" || fail "Remote directory \"$DROP\" could not be created"
 
-    # If any of the files already exist, fail before we've copied anything
-    for file in "$DROP$TCK"{,.sig,sha256}; do
-	ssh "$HOST" "[ ! -e $file ]" || fail "Refusing to overwrite existing file $file"
-    done
+    ( # Perform the upload
+        # make the remote directory, if needed
+        ssh "$HOST" "[ -e $DROP ] || mkdir -p $DROP" || fail "Remote directory \"$DROP\" could not be created"
 
-    # Ok, we're clear to copy for real
-    for file in "$TCK"{,.sig,.sha256}; do
-	echo "Uploading $DROP/$file"
-	scp "$file" "$HOST:$DROP" 
-    done
+        # If any of the local files already exist remotely, fail before we've copied anything
+        for file in *; do
+            ssh "$HOST" "[ ! -e $DROP/$file ]" || fail "Refusing to overwrite existing file $file"
+        done
 
-    # Because hey why not, download it again and check the signature
-    scp "$HOST:$DROP$TCK" "$TCK.copy" || fail "Unable to redownload $TCK"
+        # Ok, we're clear to copy for real
+        rsync -v -e ssh * "$HOST:$DROP/"
+    )
 
-    # Verify the signature to be safe
-    gpg --verify "$TCK".sig "$TCK.copy" || fail "Signature Verification failed.  Upload was incomplete"
+    (# Verify our upload
+
+        VERIFY="/tmp/verify-$$" && mkdir "$VERIFY" || fail "Could not make tmp directory for verification"
+        for file in *; do
+            curl "https://download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/$file" > "$VERIFY/$file"
+        done
+
+        for sig in $VERIFY/*.sig; do
+            # remove the ".sig" extension, this is the file we're verifying
+            file="${sig/.sig/}"
+
+            # Verify the signature
+            gpg --verify "$sig" "$file" || fail "Signature Verification failed.  Upload was incomplete. $file $sig"
+        done
+    )
 
     # Record the public key
     gpg --armor --export 'jakarta.ee-spec@eclipse.org' > "$WORKSPACE/jakarta.ee-spec.pub"
-    
-    # Output a clean record
-    echo "
+
+    ( # Create an audit.txt for tracing
+        echo "
 -------------------------------------
 DATE            : $(date)
 SPEC_NAME       : $SPEC_NAME
 SPEC_VERSION    : $SPEC_VERSION
-TCK_BINARY_SHA  : $(cat $TCK.sha256)
-TCK_BINARY_URL  : $TCK_BINARY_URL
+FILE_URL        : $FILE_URL
 -------------------------------------
-PROMOTED_NAME   : $TCK
-PROMOTED_URL    : https://download.eclipse.org/jakartaee/${SPEC_NAME}/$SPEC_VERSION}/$TCK
+PROMOTED FILES:
+"
+        # Print a list files we've signed and their hash
+        for sig in *.sig; do file="${sig/.sig/}"; hash="${sig/.sig/.sha256}"; echo "
+ - https://download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/$file
+   $(cat $hash)
+";      done
 
---[signature]------------------------
-$(cat $TCK.sig)
+        # Print the signatures themselves
+        for sig in *.sig; do echo "
+$sig
+$(cat $sig)
+";      done
+
+        echo "
+-------------------------------------
+JAKARTA EE PUBLIC KEY
 
 $(gpg --armor --export 'jakarta.ee-spec@eclipse.org')
-
-" | tee "$WORKSPACE/audit.txt"
+"
+    ) > "$WORKSPACE/audit.txt"
 )
