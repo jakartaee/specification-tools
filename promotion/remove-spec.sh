@@ -25,7 +25,7 @@ HOST='genie.jakartaee-spec-committee@projects-storage.eclipse.org'
     ssh "$HOST" "touch ${ZONE}status && rm ${ZONE}status" || fail "Remote directory write access denied to \"$ZONE\""
 )
 
-ssh "$HOST" "[ ! -e $DROP ]" || fail "Directory \"$DROP\" not found"
+ssh "$HOST" "ls -la $DROP" || fail "Directory \"$DROP\" not found"
 
 # Remove the remote directory
 ssh "$HOST" "rm -r $DROP" || fail "Unable to remove directory \"$DROP\""
