@@ -31,8 +31,5 @@ HOST='genie.jakartaee-spec-committee@projects-storage.eclipse.org'
 # Do a directory listing and report if the spec version is not found
 ssh "$HOST" "ls -la $DROP" || fail "Specification directory \"$DROP\" not found"
 
-# Verify the file exists before we try to remove it
-ssh "$HOST" "[ ! -e $FILE ]" || fail "File \"$FILE\" not found"
-
 # Remove the remote file
 ssh "$HOST" "rm -r $FILE" || fail "Unable to remove file \"$FILE\""
