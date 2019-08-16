@@ -13,7 +13,8 @@ require SPEC_FILE "[a-zA-Z][a-zA-Z0-9._-]+[a-zA-Z0-9]"
 ##[ Main ]#######################
 
 ZONE="/home/data/httpd/download.eclipse.org/jakartaee/"
-DROP="/home/data/httpd/download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/${SPEC_FILE}"
+DROP="/home/data/httpd/download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/"
+FILE="/home/data/httpd/download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/${SPEC_FILE}"
 HOST='genie.jakartaee-spec-committee@projects-storage.eclipse.org'
 
 ( # Test SSH access and write access
@@ -27,7 +28,11 @@ HOST='genie.jakartaee-spec-committee@projects-storage.eclipse.org'
     ssh "$HOST" "touch ${ZONE}status && rm ${ZONE}status" || fail "Remote directory write access denied to \"$ZONE\""
 )
 
-ssh "$HOST" "[ ! -e $DROP ]" || fail "File \"$DROP\" not found"
+# Do a directory listing and report if the spec version is not found
+ssh "$HOST" "ls -la $DROP" || fail "Specification directory \"$DROP\" not found"
 
-# Remove the remote directory
-ssh "$HOST" "rm -r $DROP" || fail "Unable to remove file \"$DROP\""
+# Verify the file exists before we try to remove it
+ssh "$HOST" "[ ! -e $FILE ]" || fail "File \"$FILE\" not found"
+
+# Remove the remote file
+ssh "$HOST" "rm -r $FILE" || fail "Unable to remove file \"$FILE\""
