@@ -126,4 +126,8 @@ JAKARTA EE PUBLIC KEY
 $(gpg --armor --export 'jakarta.ee-spec@eclipse.org')
 "
     ) > "$WORKSPACE/audit.txt"
+
+    # Add a download link we can see in the Jenkins job results
+    echo "<meta http-equiv=\"Refresh\" content=\"0; url=https://download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/\" />" > "$WORKSPACE/View-Files.html"
+
 )
