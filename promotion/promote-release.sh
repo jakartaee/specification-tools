@@ -29,15 +29,15 @@ UPDATED_KEYRING=/tmp/updated
 
     # Export the corresponding public key.  If the private key has been rotated we will need to
     # republish our public keys with the current keys included
-    gpg --armor --export 'jakarta.ee-spec@eclipse.org' > "jakartaee-spec.current.pub" || fail "Unable to export jakartaee-spec.current.pub from $GNUPGHOME"
+    gpg --armor --export 'jakarta.ee-spec@eclipse.org' > "/tmp/jakartaee-spec.current.pub" || fail "Unable to export jakartaee-spec.current.pub from $GNUPGHOME"
 )
 
 ( # Download and import the published public keys into a dedicated keyring
     export GNUPGHOME="$CONSUMER_KEYRING"
 
     # For safety, we only verify with public keys the Specification Committee has explicitly published
-    curl -O "https://raw.githubusercontent.com/jakartaee/specification-committee/master/jakartaee-spec-committee.pub" > "jakartaee-spec.published.pub" || fail "Cannot download published jakartaee-spec-committee.pub"
-    gpg-import "jakartaee-spec.published.pub"
+    curl "https://raw.githubusercontent.com/jakartaee/specification-committee/master/jakartaee-spec-committee.pub" > "/tmp/jakartaee-spec.published.pub" || fail "Cannot download published jakartaee-spec-committee.pub"
+    gpg-import "/tmp/jakartaee-spec.published.pub"
 )
 
 ( # Import both the current and published keys into one keyring
@@ -49,8 +49,8 @@ UPDATED_KEYRING=/tmp/updated
   # with jakartaee-spec-committee.updated.pub and committing it is how we would do that.
     export GNUPGHOME="$UPDATED_KEYRING"
 
-    gpg-import "jakartaee-spec.published.pub"
-    gpg-import "jakartaee-spec.current.pub"
+    gpg-import "/tmp/jakartaee-spec.published.pub"
+    gpg-import "/tmp/jakartaee-spec.current.pub"
 
     gpg --armor --export 'jakarta.ee-spec@eclipse.org' > "$WORKSPACE/jakartaee-spec-committee.updated.pub" || fail "Unable to export jakartaee-spec-committee.updated.pub from $GNUPGHOME"
 )

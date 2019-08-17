@@ -11,7 +11,7 @@ function gpg-import {
         mkdir "$GNUPGHOME" && chmod 700 "$GNUPGHOME" || fail "Cannot create GNUPGHOME dir $GNUPGHOME"
     }
 
-    gpg --batch --import "${keyfile}"
+    gpg --batch --import "${keyfile}" || fail "Unable to import $keyfile to $GNUPGHOME"
 
     # Iterate over each of the imported private keys and mark them trusted
     for key in $(gpg --list-keys --with-colons | tr ':' '\t' | grep '^fpr' | cut -f 10); do
