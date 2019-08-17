@@ -11,7 +11,8 @@ require KEYRING
 require PASSPHRASE
 require SPEC_NAME "[a-z][a-z-]*[a-z]"
 require SPEC_VERSION "[1-9][0-9.]*"
-require FILE_URL "https?://download.eclipse.org/.*\.(zip|tar.gz|pdf|jar|war|ear)"
+require TCK_URL "https?://download.eclipse.org/[a-zA-Z0-9_./-]+\.(zip|tar.gz)"
+optional FILE_URLS "https?://download.eclipse.org/[a-zA-Z0-9_./-]+\.(zip|tar.gz|pdf|jar|war|ear|txt)"
 
 ##[ Main ]#######################
 
@@ -28,14 +29,20 @@ require FILE_URL "https?://download.eclipse.org/.*\.(zip|tar.gz|pdf|jar|war|ear)
 ( # Create a tmp dir and download the TCK
     TMP="/tmp/download-$$" && mkdir "$TMP" && cd "$TMP"
 
-    # Local file name of the TCK zip or tar.gz
-    FILE="$(basename "$FILE_URL")"
+    for url in $TCK_URL $FILE_URLS; do
+        # Local file name of the TCK zip or tar.gz
+        file="$(basename "$url")"
 
-    # Download the TCK or fail
-    curl "$FILE_URL" > "$FILE" || fail "Could not download $FILE_URL"
+        # File name must start with safe characters
+        # No passing us a "-r" or ".." file or some cleverness
+        require file "[a-zA-Z0-9].*"
 
-    # If the tck starts with "eclipse-" rename it "jakarta-"
-    [[ $FILE == eclipse-* ]] && cp $FILE ${FILE/eclipse-/jakarta-}
+        # Download the file or fail
+        curl "$url" > "$file" || fail "Could not download $url"
+
+        # If the tck starts with "eclipse-" rename it "jakarta-"
+        [[ "$file" == eclipse-* ]] && cp "$file" "${file/eclipse-/jakarta-}"
+    done
 
     # Our list of files before we start signing
     FILES=($(ls))
