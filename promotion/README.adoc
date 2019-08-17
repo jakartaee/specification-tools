@@ -1,4 +1,93 @@
 # Promoting a Release
 
-To sign and publishing officially approved binaries
+To sign and publish officially approved binaries a member of the Specification Committee must execute the following Jenkins job:
 
+ - https://ci.eclipse.org/jakartaee-spec-committee/job/promote-release/
+
+## Parameters
+
+### SPEC_NAME
+
+The short name of the specification as used in URLs, such as "dependency-injection", "enterprise-beans", "messaging".
+
+Input is scrubbed to strictly match the following regex `[a-z][a-z-]*[a-z]`
+
+### SPEC_VERSION
+
+The two-digit version number of the specification as used in URLs, such as "1.0", "3.2", "2.0"
+
+Input is scrubbed to strictly match the following regex `[1-9][0-9.]*`
+
+### FILE_URLS
+
+Newline-separated list of TCK or other files that should be published. Acceptable extensions include pdf, txt, zip, tar.gz, jar, war, ear. URLs must start with `https://download.eclipse.org`
+
+At least one URL must be supplied.  This will typically be the TCK, but could also be other files such as specification PDFs or exclude lists.
+
+Input is scrubbed to strictly match the following regex `https?://download.eclipse.org/[a-zA-Z0-9_./-]+\.(zip|tar.gz|pdf|jar|war|ear|txt)`
+
+NOTE: We may decide to expand the locations from where we will accept URLs, such as github.com or Maven Central.  It was left conservative to match existing behavior.
+
+The job may be run multiple times against the same specification version, allowing additional files to be published at a later date.
+
+## Error conditions and Special Notes
+
+### Using `eclipse-` file prefix
+
+Files that start with "eclipse-*", such as `eclipse-xml-rpc-tck-1.1.0.zip` will be duplicated as `jakarta-xml-rpc-tck-1.1.0.zip` for branding reasons.  For the benefit of any existing URLs in documents, the "eclipse-*" is still uploaded.
+
+In the future, files that start with "eclipse-*" may be refused by the Specification Committee.
+
+### File already exists
+
+The script will refuse to overwrite any existing file.  If it is determined a file would be overwritten, no files are uploaded and the job will fail with no need for manual cleanup.
+
+### Signatures do not validate
+
+After the upload is complete, all files are downloaded via the official URL and each signature is checked.  If a signature fails validation, manual cleanup is necessary.
+
+## Handling mistakes
+
+In the event a file needs to be removed, a member of the Specification Committee can execute any of the following jobs.
+
+### remove-file
+
+The https://ci.eclipse.org/jakartaee-spec-committee/job/remove-file/[remove-file] job will remove a single file from inside a specification release.  This job takes the following parameters and strictly screens the input using the corresponding regular expression.
+
+|===
+| SPEC_NAME | `[a-z][a-z-]*[a-z]`
+| SPEC_VERSION | `[1-9][0-9.]*`
+| SPEC_FILE | `[a-zA-Z][a-zA-Z0-9._-]+[a-zA-Z0-9]`
+|===
+
+### remove-release
+
+The https://ci.eclipse.org/jakartaee-spec-committee/job/remove-release/[remove-release] job will remove an entire version of a specification.  This job takes the following parameters and strictly screens the input using the corresponding regular expression.
+
+|===
+| SPEC_NAME | `[a-z][a-z-]*[a-z]`
+| SPEC_VERSION | `[1-9][0-9.]*`
+| SPEC_FILE | `[a-zA-Z][a-zA-Z0-9._-]+[a-zA-Z0-9]`
+|===
+
+### remove-spec
+
+The https://ci.eclipse.org/jakartaee-spec-committee/job/remove-spec/[remove-spec] job will remove an entire specification directory, including all versions and files.  This job takes the following parameters and strictly screens the input using the corresponding regular expression.
+
+|===
+| SPEC_NAME | `[a-z][a-z-]*[a-z]`
+|===
+
+It is expected this job will only be used for cleanup after trial runs of the `promote-release` job.
+
+= Public Key
+
+The public key used to verify all signatures is intentionally published outside the https://download.eclipse.org URL in the following locations:
+
+ - https://jakarta.ee/specification-committee/jakartaee-spec-committee.pub (pending)
+
+As the key rotates, an update must be done against the following repository location.
+
+ - https://github.com/jakartaee/specification-committee/blob/master/jakartaee-spec-committee.pub
+
+For convenience, the public key is exported and attached to each run of the `promote-release` job.
