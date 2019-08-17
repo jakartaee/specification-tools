@@ -54,7 +54,7 @@ UPDATED_KEYRING=/tmp/updated
 
     gpg --armor --export 'jakarta.ee-spec@eclipse.org' > "$WORKSPACE/jakartaee-spec-committee.updated.pub" || fail "Unable to export jakartaee-spec-committee.updated.pub from $GNUPGHOME"
 )
-exit
+
 ( # Create a tmp dir and download the TCK
     TMP="/tmp/download-$$" && mkdir "$TMP" && cd "$TMP"
 
