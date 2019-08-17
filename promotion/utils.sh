@@ -21,9 +21,11 @@ function require {
     # Fail if the variable name doesn't exist
     [ -n "${!name}" ] || fail "$name environment variable was not set"
 
+    local normalized="$(echo "${!name}" | egrep -v "^[\t ]*$")"
+
     # (optional) Match against a regex and fail if it doesn't match
     if [ -n "$regex" ]; then
-	echo "${!name}" | egrep --silent "^$regex$" ||
-	    fail "$name value \"${!name}\" does not match pattern \"$regex\""
+        local matches="$(echo "$normalized" | egrep "^$regex$")"
+        [[ "$normalized" == "$matches" ]] || fail "$name value \"${!name}\" does not match pattern \"$regex\""
     fi
 }
