@@ -3,6 +3,7 @@
 ##[ Imports ]####################
 
 source "$(dirname $0)/utils.sh"
+source "$(dirname $0)/report.sh"
 
 ##[ Required Environment ]#######
 
@@ -35,6 +36,9 @@ require FILE_URL "https?://download.eclipse.org/.*\.(zip|tar.gz|pdf|jar|war|ear)
 
     # If the tck starts with "eclipse-" rename it "jakarta-"
     [[ $FILE == eclipse-* ]] && cp $FILE ${FILE/eclipse-/jakarta-}
+
+    # Our list of files before we start signing
+    FILES=($(ls))
 
     ( # Hash and sign
 
@@ -97,37 +101,6 @@ require FILE_URL "https?://download.eclipse.org/.*\.(zip|tar.gz|pdf|jar|war|ear)
     # Record the public key
     gpg --armor --export 'jakarta.ee-spec@eclipse.org' > "$WORKSPACE/jakarta.ee-spec.pub"
 
-    ( # Create an audit.txt for tracing
-        echo "
--------------------------------------
-DATE            : $(date)
-SPEC_NAME       : $SPEC_NAME
-SPEC_VERSION    : $SPEC_VERSION
-FILE_URL        : $FILE_URL
--------------------------------------
-PROMOTED FILES:
-"
-        # Print a list files we've signed and their hash
-        for sig in *.sig; do file="${sig/.sig/}"; hash="${sig/.sig/.sha256}"; echo "
- - https://download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/$file
-   $(cat $hash)
-";      done
-
-        # Print the signatures themselves
-        for sig in *.sig; do echo "
-$sig
-$(cat $sig)
-";      done
-
-        echo "
--------------------------------------
-JAKARTA EE PUBLIC KEY
-
-$(gpg --armor --export 'jakarta.ee-spec@eclipse.org')
-"
-    ) > "$WORKSPACE/audit.txt"
-
-    # Add a download link we can see in the Jenkins job results
-    echo "<html><head><meta http-equiv=\"Refresh\" content=\"0; url=https://download.eclipse.org/jakartaee/${SPEC_NAME}/${SPEC_VERSION}/\" /></head></html>" > "$WORKSPACE/View-Files.html"
+    report "${FILES[@]}" > "$WORKSPACE/${SPEC_NAME}-${SPEC_VERSION}.html"
 
 )
