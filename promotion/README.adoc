@@ -34,15 +34,21 @@ The job may be run multiple times against the same specification version, allowi
 
 ### Using `eclipse-` file prefix
 
-Files that start with "eclipse-*", such as `eclipse-xml-rpc-tck-1.1.0.zip` will be duplicated as `jakarta-xml-rpc-tck-1.1.0.zip` for branding reasons.  For the benefit of any existing URLs in documents, the "eclipse-*" is still uploaded.
+Files that start with `eclipse-*`, such as `eclipse-xml-rpc-tck-1.1.0.zip` will be duplicated as `jakarta-xml-rpc-tck-1.1.0.zip` for branding reasons.  For the benefit of any existing URLs in documents, the `eclipse-*` is still uploaded.
 
-In the future, files that start with "eclipse-*" may be refused by the Specification Committee.
+In the future, files that start with `eclipse-*` may be refused by the Specification Committee.
 
 ### File already exists
 
 The script will refuse to overwrite any existing file.  If it is determined a file would be overwritten, no files are uploaded and the job will fail with no need for manual cleanup.
 
-### Signatures do not validate
+### Outdated Public Keys. Signature Verification failed
+
+Immediately after signing and before uploading, the signature of each file is verified using the published public keys.  In the event the private key has been rotated, this step will fail.  No binaries will be published and the download area does not need to be cleaned up.  However, all runs of `promote-release` will continue to fail until the public keys are published as per "Updating Public Keys" below.
+
+By design, we refuse to publish binaries the world cannot verify.
+
+### Downloaded Signature Verification failed
 
 After the upload is complete, all files are downloaded via the official URL and each signature is checked.  If a signature fails validation, manual cleanup is necessary.
 
@@ -82,12 +88,20 @@ It is expected this job will only be used for cleanup after trial runs of the `p
 
 = Public Key
 
-The public key used to verify all signatures is intentionally published outside the https://download.eclipse.org URL in the following locations:
+The public key used to verify all signatures is intentionally published outside the https://download.eclipse.org URL in the following mirrored locations:
 
  - https://jakarta.ee/specification-committee/jakartaee-spec-committee.pub (pending)
+ - https://raw.githubusercontent.com/jakartaee/specification-committee/master/jakartaee-spec-committee.pub
+
+== Updating Public Keys
 
 As the key rotates, an update must be done against the following repository location.
 
  - https://github.com/jakartaee/specification-committee/blob/master/jakartaee-spec-committee.pub
 
-For convenience, the public key is exported and attached to each run of the `promote-release` job.
+This file is intentionally stored in revision control so any and all accidents are survivable.  We have complete history of all keys used in the lifetime of the Working Group and old keys can never be lost.
+
+To update the published public keys, download this file and use it to overwrite the contents of `jakartaee-spec-committee.pub` in the `specification-committee` repo:
+
+ - https://ci.eclipse.org/jakartaee-spec-committee/job/promote-release/lastBuild/artifact/jakartaee-spec-committee.updated.pub
+

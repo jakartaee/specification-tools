@@ -4,6 +4,7 @@
 
 source "$(dirname $0)/utils.sh"
 source "$(dirname $0)/report.sh"
+source "$(dirname $0)/keys.sh"
 
 ##[ Required Environment ]#######
 
@@ -15,14 +16,43 @@ require FILE_URLS "https?://download.eclipse.org/[a-zA-Z0-9_./-]+\.(zip|tar.gz|p
 
 ##[ Main ]#######################
 
-( # Load the keyring into gpg so we can sign
-    
-    gpg --batch --import "${KEYRING}"
-    # Iterate over each of the imported private keys and mark them trusted
-    for key in $(gpg --list-keys --with-colons | tr ':' '\t' | grep '^fpr' | cut -f 10); do
-    # The echo statement handles providing two values to an interactive prompt
-    echo -e "5\ny\n" |  gpg --batch --command-fd 0 --expert --edit-key "$key" trust;
-    done
+COMMITTEE_KEYRING=/tmp/committee
+CONSUMER_KEYRING=/tmp/consumer
+UPDATED_KEYRING=/tmp/updated
+
+( # Import the locally available private keys into a dedicated keyring
+    export GNUPGPHOME="$COMMITTEE_KEYRING"
+
+    # The Eclipse infrastrucutre team gives us the KEYRING file via the Jenkins job
+    # It's possible these keys have been rotated and we will need to take action
+    gpg-import "$KEYRING"
+
+    # Export the corresponding public key.  If the private key has been rotated we will need to
+    # republish our public keys with the current keys included
+    gpg --armor --export 'jakarta.ee-spec@eclipse.org' > "jakartaee-spec.current.pub"
+)
+
+( # Download and import the published public keys into a dedicated keyring
+    export GNUPGPHOME="$CONSUMER_KEYRING"
+
+    # For safety, we only verify with public keys the Specification Committee has explicitly published
+    curl -O "https://raw.githubusercontent.com/jakartaee/specification-committee/master/jakartaee-spec-committee.pub" > "jakartaee-spec.published.pub"
+    gpg-import "jakartaee-spec.published.pub"
+)
+
+( # Import both the current and published keys into one keyring
+  #
+  # If our keys have been rotated, "jakartaee-spec-committee.updated.pub" is the file
+  # we need to publish to the url above.
+  #
+  # Overwritting the contents of jakartaee-spec-committee.pub
+  # with jakartaee-spec-committee.updated.pub and committing it is how we would do that.
+    export GNUPGPHOME="$UPDATED_KEYRING"
+
+    gpg-import "jakartaee-spec.published.pub"
+    gpg-import "jakartaee-spec.current.pub"
+
+    gpg --armor --export 'jakarta.ee-spec@eclipse.org' > "$WORKSPACE/jakartaee-spec-committee.updated.pub"
 )
 
 ( # Create a tmp dir and download the TCK
@@ -43,17 +73,23 @@ require FILE_URLS "https?://download.eclipse.org/[a-zA-Z0-9_./-]+\.(zip|tar.gz|p
         [[ "$file" == eclipse-* ]] && cp "$file" "${file/eclipse-/jakarta-}"
     done
 
-    # Our list of files before we start signing
+    # Our list of files before we start signing.  Used in the final report step
     FILES=($(ls))
 
     ( # Hash and sign
-
         for file in *; do
-            # Sign the TCK or fail
-            echo "${PASSPHRASE}" | gpg --sign --armor --batch --passphrase-fd 0 --output "$file".sig --detach-sig "$file" || fail "Signature failed"
+            ( # Sign using the committee keyring
+                export GNUPGPHOME="$COMMITTEE_KEYRING"
+                echo "${PASSPHRASE}" | gpg --sign --armor --batch --passphrase-fd 0 --output "$file".sig --detach-sig "$file" || fail "Signature failed"
+            )
 
-            # Verify the signature to be safe
-            gpg --verify "$file".sig "$file" || fail "Signature Verification failed for \"$file\""
+            ( # Verify using the consumer keyring
+                export GNUPGPHOME="$CONSUMER_KEYRING"
+
+                # If someone has rotated the private key but NOT updated the
+                # public key file in github, this step will fail
+                gpg --verify "$file".sig "$file" || fail "Outdated Public Keys. Signature Verification failed for \"$file\". Our keys have likely been rotated and we need to publish jakartaee-spec-committee.updated.pub"
+            )
 
             # Calculate the sha256 for convenience
             shasum -a 256 "$file" | tr ' ' '\t' | cut -f 1 > "$file.sha256" || fail "SHA-256 creation failed for \"$file\""
@@ -99,14 +135,14 @@ require FILE_URLS "https?://download.eclipse.org/[a-zA-Z0-9_./-]+\.(zip|tar.gz|p
             # remove the ".sig" extension, this is the file we're verifying
             file="${sig/.sig/}"
 
-            # Verify the signature
-            gpg --verify "$sig" "$file" || fail "Signature Verification failed.  Upload was incomplete. $file $sig"
+            ( # Verify the signature
+                export GNUPGPHOME="$CONSUMER_KEYRING"
+                gpg --verify "$sig" "$file" || fail "Downloaded Signature Verification failed.  Upload was incomplete. $file $sig"
+            )
         done
     )
 
-    # Record the public key
-    gpg --armor --export 'jakarta.ee-spec@eclipse.org' > "$WORKSPACE/jakarta.ee-spec.pub"
-
+    export GNUPGPHOME="$COMMITTEE_KEYRING"
     report "${FILES[@]}" > "$WORKSPACE/${SPEC_NAME}-${SPEC_VERSION}.html"
 
 )
