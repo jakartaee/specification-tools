@@ -34,9 +34,9 @@ The job may be run multiple times against the same specification version, allowi
 
 ### Using `eclipse-` file prefix
 
-Files that start with `eclipse-*`, such as `eclipse-xml-rpc-tck-1.1.0.zip` will be duplicated as `jakarta-xml-rpc-tck-1.1.0.zip` for branding reasons.  For the benefit of any existing URLs in documents, the `eclipse-*` is still uploaded.
+Files that start with `eclipse-`, such as `eclipse-xml-rpc-tck-1.1.0.zip` will be duplicated as `jakarta-xml-rpc-tck-1.1.0.zip` for branding reasons.  For the benefit of any existing URLs in documents, the `eclipse-` is still uploaded.
 
-In the future, files that start with `eclipse-*` may be refused by the Specification Committee.
+In the future, files that start with `eclipse-` may be refused by the Specification Committee.
 
 ### File already exists
 

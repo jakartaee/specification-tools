@@ -21,7 +21,7 @@ CONSUMER_KEYRING=/tmp/consumer
 UPDATED_KEYRING=/tmp/updated
 
 ( # Import the locally available private keys into a dedicated keyring
-    export GNUPGPHOME="$COMMITTEE_KEYRING"
+    export GNUPGHOME="$COMMITTEE_KEYRING"
 
     # The Eclipse infrastrucutre team gives us the KEYRING file via the Jenkins job
     # It's possible these keys have been rotated and we will need to take action
@@ -33,7 +33,7 @@ UPDATED_KEYRING=/tmp/updated
 )
 
 ( # Download and import the published public keys into a dedicated keyring
-    export GNUPGPHOME="$CONSUMER_KEYRING"
+    export GNUPGHOME="$CONSUMER_KEYRING"
 
     # For safety, we only verify with public keys the Specification Committee has explicitly published
     curl -O "https://raw.githubusercontent.com/jakartaee/specification-committee/master/jakartaee-spec-committee.pub" > "jakartaee-spec.published.pub"
@@ -47,14 +47,14 @@ UPDATED_KEYRING=/tmp/updated
   #
   # Overwritting the contents of jakartaee-spec-committee.pub
   # with jakartaee-spec-committee.updated.pub and committing it is how we would do that.
-    export GNUPGPHOME="$UPDATED_KEYRING"
+    export GNUPGHOME="$UPDATED_KEYRING"
 
     gpg-import "jakartaee-spec.published.pub"
     gpg-import "jakartaee-spec.current.pub"
 
     gpg --armor --export 'jakarta.ee-spec@eclipse.org' > "$WORKSPACE/jakartaee-spec-committee.updated.pub"
 )
-
+exit
 ( # Create a tmp dir and download the TCK
     TMP="/tmp/download-$$" && mkdir "$TMP" && cd "$TMP"
 
@@ -79,12 +79,12 @@ UPDATED_KEYRING=/tmp/updated
     ( # Hash and sign
         for file in *; do
             ( # Sign using the committee keyring
-                export GNUPGPHOME="$COMMITTEE_KEYRING"
+                export GNUPGHOME="$COMMITTEE_KEYRING"
                 echo "${PASSPHRASE}" | gpg --sign --armor --batch --passphrase-fd 0 --output "$file".sig --detach-sig "$file" || fail "Signature failed"
             )
 
             ( # Verify using the consumer keyring
-                export GNUPGPHOME="$CONSUMER_KEYRING"
+                export GNUPGHOME="$CONSUMER_KEYRING"
 
                 # If someone has rotated the private key but NOT updated the
                 # public key file in github, this step will fail
@@ -136,13 +136,13 @@ UPDATED_KEYRING=/tmp/updated
             file="${sig/.sig/}"
 
             ( # Verify the signature
-                export GNUPGPHOME="$CONSUMER_KEYRING"
+                export GNUPGHOME="$CONSUMER_KEYRING"
                 gpg --verify "$sig" "$file" || fail "Downloaded Signature Verification failed.  Upload was incomplete. $file $sig"
             )
         done
     )
 
-    export GNUPGPHOME="$COMMITTEE_KEYRING"
+    export GNUPGHOME="$COMMITTEE_KEYRING"
     report "${FILES[@]}" > "$WORKSPACE/${SPEC_NAME}-${SPEC_VERSION}.html"
 
 )
