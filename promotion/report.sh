@@ -105,8 +105,8 @@ cat <<HTML
     <div class="value">$SPEC_VERSION</div>
   </div>
   <div class="input">
-    <div class="name">FILE_URL</div>
-    <div class="value">$FILE_URL</div>
+    <div class="name">FILE_URLS</div>
+    <div class="value">$FILE_URLS</div>
   </div>
 </div>
 
