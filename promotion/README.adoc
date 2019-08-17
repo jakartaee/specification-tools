@@ -1,0 +1,4 @@
+# Promoting a Release
+
+To sign and publishing officially approved binaries
+
