@@ -10,13 +10,13 @@ To sign and publish officially approved binaries a member of the Specification C
 
 The short name of the specification as used in URLs, such as "dependency-injection", "enterprise-beans", "messaging".
 
-Input is scrubbed to strictly match the following regex `[a-z][a-z-]*[a-z]`
+Input is validated to strictly match the following regex `[a-z][a-z-]*[a-z]`
 
 ### SPEC_VERSION
 
 The two-digit version number of the specification as used in URLs, such as "1.0", "3.2", "2.0"
 
-Input is scrubbed to strictly match the following regex `[1-9][0-9.]*`
+Input is validated to strictly match the following regex `[1-9][0-9]*(.[0-9]+)?`
 
 ### FILE_URLS
 
@@ -24,7 +24,7 @@ Newline-separated list of TCK or other files that should be published. Acceptabl
 
 At least one URL must be supplied.  This will typically be the TCK, but could also be other files such as specification PDFs or exclude lists.
 
-Input is scrubbed to strictly match the following regex `https?://download.eclipse.org/[a-zA-Z0-9_./-]+\.(zip|tar.gz|pdf|jar|war|ear|txt)`
+Input is validated to strictly match the following regex `https?://download.eclipse.org/[a-zA-Z0-9_./-]+\.(zip|tar.gz|pdf|jar|war|ear|txt)`
 
 NOTE: We may decide to expand the locations from where we will accept URLs, such as github.com or Maven Central.  It was left conservative to match existing behavior.
 
@@ -62,7 +62,7 @@ The https://ci.eclipse.org/jakartaee-spec-committee/job/remove-file/[remove-file
 
 |===
 | SPEC_NAME | `[a-z][a-z-]*[a-z]`
-| SPEC_VERSION | `[1-9][0-9.]*`
+| SPEC_VERSION | `[1-9][0-9]*(.[0-9]+)?`
 | SPEC_FILE | `[a-zA-Z][a-zA-Z0-9._-]+[a-zA-Z0-9]`
 |===
 
@@ -72,7 +72,7 @@ The https://ci.eclipse.org/jakartaee-spec-committee/job/remove-release/[remove-r
 
 |===
 | SPEC_NAME | `[a-z][a-z-]*[a-z]`
-| SPEC_VERSION | `[1-9][0-9.]*`
+| SPEC_VERSION | `[1-9][0-9]*(.[0-9]+)?`
 | SPEC_FILE | `[a-zA-Z][a-zA-Z0-9._-]+[a-zA-Z0-9]`
 |===
 

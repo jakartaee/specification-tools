@@ -7,7 +7,7 @@ source "$(dirname $0)/utils.sh"
 ##[ Required Environment ]#######
 
 require SPEC_NAME "[a-z][a-z-]*[a-z]"
-require SPEC_VERSION "[1-9][0-9.]*"
+require SPEC_VERSION "[1-9][0-9]*(.[0-9]+)?"
 require SPEC_FILE "[a-zA-Z][a-zA-Z0-9._-]+[a-zA-Z0-9]"
 
 ##[ Main ]#######################
