@@ -72,7 +72,6 @@ UPDATED_KEYRING=/tmp/updated
         # If the tck starts with "eclipse-" rename it "jakarta-"
         [[ "$file" == eclipse-* ]] && cp "$file" "${file/eclipse-/jakarta-}"
 
-	mv eclipse-concurrency-tck-1.0.0.zip eclipse-concurrency-tck-1.1.0.zip
     done
 
     # Our list of files before we start signing.  Used in the final report step
