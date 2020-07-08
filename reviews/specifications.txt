@@ -1,0 +1,41 @@
+Jakarta EE Platform
+Jakarta EE Web Profile
+Jakarta Activation
+Jakarta Annotations
+Jakarta Authentication
+Jakarta Authorization
+Jakarta Batch
+Jakarta Bean Validation
+Jakarta Concurrency
+Jakarta Connectors
+Jakarta Contexts and Dependency Injection
+Jakarta Debugging Support for Other Languages
+Jakarta Dependency Injection
+Jakarta Deployment
+Jakarta Enterprise Beans
+Jakarta Enterprise Web Services
+Jakarta Expression Language
+Jakarta Interceptors
+Jakarta JSON Binding
+Jakarta JSON Processing
+Jakarta Mail
+Jakarta Managed Beans
+Jakarta Management
+Jakarta Messaging
+Jakarta MVC
+Jakarta NoSQL
+Jakarta Persistence
+Jakarta RESTful Web Services
+Jakarta Security
+Jakarta Server Faces
+Jakarta Server Pages
+Jakarta Servlet
+Jakarta SOAP with Attachments
+Jakarta Standard Tag Library
+Jakarta Transactions
+Jakarta Web Services Metadata
+Jakarta WebSocket
+Jakarta XML Binding
+Jakarta XML Registries
+Jakarta XML RPC
+Jakarta XML Web Services Specification
