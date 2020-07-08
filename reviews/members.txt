@@ -1,0 +1,10 @@
+Kenji Kazumura - Fujitsu
+Dan Bandera - IBM - Kevin Sutter
+Ed Bratt - Oracle - Dmitry Kornilov
+Andrew Pielage - Payara - Matt Gill
+Scott Stark - Red Hat - Mark Little
+David Blevins - Tomitribe - Jean-Louis Monterio, Cesar Hernandez
+Ivar Grimstad - PMC Representative
+Marcelo Ancelmo - Participant Member - Martijn Verburg
+Werner Keil - Committer Member
+Scott (Congquan) Wang - Primeton - Enterprise Member 
