@@ -12,7 +12,7 @@ require KEYRING
 require PASSPHRASE
 require SPEC_NAME "[a-z][a-z-]*[a-z]"
 require SPEC_VERSION "[1-9][0-9]*(.[0-9]+)?"
-require FILE_URLS "https?://download.eclipse.org/[a-zA-Z0-9_./-]+\.(zip|tar.gz|pdf|jar|war|ear|txt)"
+require FILE_URLS "https?://download.eclipse.org/[a-zA-Z0-9_./-]+\.(zip|tar.gz|pdf|jar|war|ear|txt|html)"
 
 ##[ Main ]#######################
 
