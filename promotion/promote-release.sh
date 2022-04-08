@@ -36,7 +36,7 @@ UPDATED_KEYRING=/tmp/updated
     export GNUPGHOME="$CONSUMER_KEYRING"
 
     # For safety, we only verify with public keys the Specification Committee has explicitly published
-    curl "https://raw.githubusercontent.com/jakartaee/specification-committee/master/jakartaee-spec-committee.pub" > "/tmp/jakartaee-spec.published.pub" || fail "Cannot download published jakartaee-spec-committee.pub"
+    curl "https://jakarta.ee/specifications/jakartaee-spec-committee.pub" > "/tmp/jakartaee-spec.published.pub" || fail "Cannot download published jakartaee-spec-committee.pub"
     gpg-import "/tmp/jakartaee-spec.published.pub"
 )
 
