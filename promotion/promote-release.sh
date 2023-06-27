@@ -67,7 +67,7 @@ UPDATED_KEYRING=/tmp/updated
         require file "[a-zA-Z0-9].*"
 
         # Download the file or fail
-        curl "$url" > "$file" || fail "Could not download $url"
+        curl -L "$url" > "$file" || fail "Could not download $url"
 
         # If the tck starts with "eclipse-" rename it "jakarta-"
         [[ "$file" == eclipse-* ]] && cp "$file" "${file/eclipse-/jakarta-}"
