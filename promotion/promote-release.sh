@@ -77,8 +77,6 @@ UPDATED_KEYRING=/tmp/updated
     # Our list of files before we start signing.  Used in the final report step
     FILES=($(ls))
 
-    export GPG_TTY=$(tty)
-
     ( # Hash and sign
         for file in *; do
             ( # Sign using the committee keyring
