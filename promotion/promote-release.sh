@@ -20,6 +20,8 @@ COMMITTEE_KEYRING=/tmp/committee
 CONSUMER_KEYRING=/tmp/consumer
 UPDATED_KEYRING=/tmp/updated
 
+export GPG_TTY=$(tty)
+
 ( # Import the locally available private keys into a dedicated keyring
     export GNUPGHOME="$COMMITTEE_KEYRING"
 
