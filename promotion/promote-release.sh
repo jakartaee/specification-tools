@@ -20,8 +20,6 @@ COMMITTEE_KEYRING=/tmp/committee
 CONSUMER_KEYRING=/tmp/consumer
 UPDATED_KEYRING=/tmp/updated
 
-export GPG_TTY=$(tty)
-
 ( # Import the locally available private keys into a dedicated keyring
     export GNUPGHOME="$COMMITTEE_KEYRING"
 
@@ -78,6 +76,8 @@ export GPG_TTY=$(tty)
 
     # Our list of files before we start signing.  Used in the final report step
     FILES=($(ls))
+
+    export GPG_TTY=$(tty)
 
     ( # Hash and sign
         for file in *; do
