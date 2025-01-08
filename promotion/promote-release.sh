@@ -81,7 +81,9 @@ UPDATED_KEYRING=/tmp/updated
         for file in *; do
             ( # Sign using the committee keyring
                 export GNUPGHOME="$COMMITTEE_KEYRING"
-                echo "${PASSPHRASE}" | gpg --sign --armor --batch --passphrase-fd 0 --output "$file".sig --detach-sig "$file" || fail "Signature failed"
+                passphrase_tmp="$(mktemp)"
+                echo "$PASSPHRASE" > "$passphrase_tmp"
+                gpg --batch --yes --pinentry-mode loopback --passphrase-file "$passphrase_tmp" --output "$file".sig --detach-sig "$file" || fail "Signature failed"
             )
 
             ( # Verify using the consumer keyring
