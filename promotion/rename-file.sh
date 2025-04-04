@@ -9,7 +9,6 @@ source "$(dirname $0)/keys.sh"
 ##[ Required Environment ]#######
 
 require KEYRING
-require PASSPHRASE
 
 ##[ Main ]#######################
 
